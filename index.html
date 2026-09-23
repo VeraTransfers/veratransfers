@@ -27,18 +27,115 @@
         }
 
         /* =========================
-           LOGIN
+           LOGIN & AUTH SPLIT
         ========================= */
 
-        #loginPage {
+        .auth-split {
             min-height: 100vh;
+            display: flex;
+            background: #f4f7f5;
+        }
+
+        .auth-visual {
+            flex: 1;
+            position: relative;
+            display: none;
+            overflow: hidden;
+            background: #111d18;
+        }
+
+        .auth-bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+        }
+
+        .auth-visual-content {
+            position: relative;
+            z-index: 2;
+            padding: 60px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 100%);
+        }
+
+        .auth-brand-white {
+            color: white !important;
+            font-size: 34px !important;
+            margin-bottom: 24px !important;
+        }
+
+        .auth-visual-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 0 0 24px;
+            line-height: 1.2;
+        }
+
+        .auth-visual-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 17px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .auth-visual-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-visual-list li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #00A859;
+            border-radius: 50%;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .auth-form-container {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 24px;
-            background:
-                radial-gradient(circle at top right, rgba(19, 141, 91, .14), transparent 35%),
-                #f4f7f5;
+        }
+
+        @media (min-width: 900px) {
+            .auth-visual {
+                display: block;
+            }
+        }
+
+        .auth-brand-mobile {
+            display: none;
+        }
+
+        @media (max-width: 899px) {
+            .auth-brand-mobile {
+                display: block;
+                text-align: center;
+            }
+            
+            .auth-split .login-card {
+                padding: 30px 20px;
+            }
         }
 
         .login-card {
@@ -1102,17 +1199,31 @@
          LOGIN
     ========================= -->
 
-    <section id="loginPage">
-
-        <div class="login-card">
-
-            <div class="brand">VeraTransfers</div>
-
-            <h1 class="login-title">Bienvenido</h1>
-
-            <div class="login-subtitle">
-                Accede a tu cuenta.
+    <section id="loginPage" class="auth-split">
+        
+        <div class="auth-visual">
+            <img src="/login_bg.jpg" class="auth-bg-img" alt="Fondo VeraTransfers">
+            <div class="auth-visual-content">
+                <div class="brand auth-brand-white">VeraTransfers</div>
+                <h2 class="auth-visual-title">Billetera oficial de Avanza Financial</h2>
+                <ul class="auth-visual-list">
+                    <li>Recepción rápida de tus préstamos</li>
+                    <li>Transferencias seguras e inmediatas</li>
+                    <li>Seguridad de grado bancario (Cifrado 256-bit)</li>
+                </ul>
             </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="login-card">
+
+                <div class="brand auth-brand-mobile">VeraTransfers</div>
+
+                <h1 class="login-title">Bienvenido</h1>
+
+                <div class="login-subtitle">
+                    Accede a tu cuenta.
+                </div>
 
             <form id="loginForm">
 
@@ -1171,8 +1282,12 @@
                     ¿Olvidaste tu contraseña?
                 </button>
             </div>
+            
+            <div style="margin-top:24px;text-align:center;font-size:12px;color:#718078;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span>🔒</span> Cifrado de extremo a extremo SSL
+            </div>
 
-            <!-- dev-note removed -->
+        </div>
         </div>
 
     </section>
@@ -1182,17 +1297,31 @@
          REGISTRO
     ========================= -->
 
-    <section id="registerPage" class="hidden">
-
-        <div class="login-card">
-
-            <div class="brand">VeraTransfers</div>
-
-            <h1 class="login-title">Crear tu cuenta</h1>
-
-            <div class="login-subtitle">
-                Regístrate para acceder a tu cuenta VeraTransfers.
+    <section id="registerPage" class="auth-split hidden">
+        
+        <div class="auth-visual">
+            <img src="/login_bg.jpg" class="auth-bg-img" alt="Fondo VeraTransfers">
+            <div class="auth-visual-content">
+                <div class="brand auth-brand-white">VeraTransfers</div>
+                <h2 class="auth-visual-title">Billetera oficial de Avanza Financial</h2>
+                <ul class="auth-visual-list">
+                    <li>Recepción rápida de tus préstamos</li>
+                    <li>Transferencias seguras e inmediatas</li>
+                    <li>Seguridad de grado bancario (Cifrado 256-bit)</li>
+                </ul>
             </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="login-card">
+
+                <div class="brand auth-brand-mobile">VeraTransfers</div>
+
+                <h1 class="login-title">Crear tu cuenta</h1>
+
+                <div class="login-subtitle">
+                    Regístrate para acceder a tu cuenta VeraTransfers.
+                </div>
 
             <form id="registerForm">
 
@@ -1272,12 +1401,17 @@
                 <button
                     type="button"
                     id="backToLoginBtn"
-                    style="background:none;border:0;color:#8fd3ff;cursor:pointer;font-size:14px;"
+                    style="background:none;border:0;color:#087a4d;cursor:pointer;font-weight:700;font-size:14px;"
                 >
                     Ya tengo una cuenta · Iniciar sesión
                 </button>
             </div>
+            
+            <div style="margin-top:24px;text-align:center;font-size:12px;color:#718078;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span>🔒</span> Cifrado de extremo a extremo SSL
+            </div>
 
+        </div>
         </div>
 
     </section>
