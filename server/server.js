@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const financeRoutes = require('./routes/finance');
 const cors = require("cors");
 const path = require("path");
@@ -129,12 +129,14 @@ res.status(500).json({
 INICIAR SERVIDOR
 ========================================= */
 
-app.listen(PORT, () => {
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(
+            `VeraTransfers ejecutándose en http://localhost:${PORT}`
+        );
+    });
+}
 
-console.log(
-    `VeraTransfers ejecutÃ¡ndose en http://localhost:${PORT}`
-);
-
-});
+module.exports = app;
 
 
