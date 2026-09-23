@@ -2252,6 +2252,7 @@
                                     <th>Cuenta</th>
                                     <th>Saldo</th>
                                     <th>Moneda</th>
+                                    <th>Acción</th>
                                 </tr>
 
                             </thead>
@@ -3297,6 +3298,12 @@ function escapeHtml(value) {
                         <td>
                             ${client.currency}
                         </td>
+                        
+                        <td style="text-align:center;">
+                            <button class="delete-btn" onclick="deleteUser(${client.id}, event)" title="Eliminar cliente" style="background:none;border:none;color:#d32f2f;cursor:pointer;font-size:18px;padding:4px;">
+                                🗑️
+                            </button>
+                        </td>
 
                     `;
 
@@ -3331,6 +3338,39 @@ function escapeHtml(value) {
 
         }
 
+
+        async function deleteUser(userId, event) {
+            event.stopPropagation(); // Evitar seleccionar el cliente al hacer clic en eliminar
+
+            if (!confirm("⚠️ ¿Estás seguro de que quieres eliminar a este cliente permanentemente? Se borrará su cuenta y su saldo. Esta acción no se puede deshacer.")) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem("vera_token");
+                const res = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                const data = await res.json();
+                
+                if (data.ok) {
+                    showToast("Cliente eliminado correctamente.", "success");
+                    if (state.selectedClient && state.selectedClient.id === userId) {
+                        state.selectedClient = null;
+                        document.getElementById("selectedClientText").textContent = "Selecciona un cliente de la tabla.";
+                        document.getElementById("creditBtn").disabled = true;
+                    }
+                    loadAdminData(); // Recargar tabla
+                } else {
+                    showToast(data.error || "No se pudo eliminar el cliente", "error");
+                }
+            } catch (err) {
+                showToast("Error de conexión al eliminar", "error");
+            }
+        }
 
         function renderAccounts() {
 

@@ -137,5 +137,36 @@ router.post("/accounts/:accountId/credit", autenticarToken, exigirAdmin, async (
         res.status(500).json({ ok: false, error: "Error interno del servidor" });
     }
 });
+/*
+ * ELIMINAR CLIENTE
+ */
+
+router.delete("/users/:userId", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const userId = Number(req.params.userId);
+
+        if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({ ok: false, error: "ID de usuario inválido" });
+        }
+        
+        // Evitar que el admin se borre a sí mismo
+        if (req.user.id === userId || req.user.userId === userId) {
+            return res.status(400).json({ ok: false, error: "No puedes eliminar tu propia cuenta" });
+        }
+
+        // Eliminar el usuario (ON DELETE CASCADE se encarga del resto)
+        const result = await db.prepare("DELETE FROM users WHERE id = ?").run(userId);
+
+        if (result.changes === 0) {
+            return res.status(404).json({ ok: false, error: "Usuario no encontrado" });
+        }
+
+        res.json({ ok: true, message: "Usuario eliminado correctamente" });
+
+    } catch (error) {
+        console.error("Delete user error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
 
 module.exports = router;
