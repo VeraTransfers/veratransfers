@@ -122,6 +122,13 @@ router.post("/login", async (req, res) => {
             });
         }
 
+        if (user.role === "blocked") {
+            return res.status(403).json({
+                ok: false,
+                error: "Cuenta bloqueada temporalmente por seguridad. Contacta a tu asesor para resolverlo."
+            });
+        }
+
         const token = jwt.sign(
             {
                 userId: user.id,

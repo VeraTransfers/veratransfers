@@ -3299,7 +3299,10 @@ function escapeHtml(value) {
                             ${client.currency}
                         </td>
                         
-                        <td style="text-align:center;">
+                        <td style="text-align:center; display:flex; justify-content:center; gap:8px;">
+                            <button class="block-btn" onclick="toggleBlockUser(${client.id}, event)" title="${client.role === 'blocked' ? 'Desbloquear' : 'Bloquear'} cliente" style="background:none;border:none;color:${client.role === 'blocked' ? '#f57c00' : '#718078'};cursor:pointer;font-size:18px;padding:4px;">
+                                🚫
+                            </button>
                             <button class="delete-btn" onclick="deleteUser(${client.id}, event)" title="Eliminar cliente" style="background:none;border:none;color:#d32f2f;cursor:pointer;font-size:18px;padding:4px;">
                                 🗑️
                             </button>
@@ -3369,6 +3372,30 @@ function escapeHtml(value) {
                 }
             } catch (err) {
                 showToast("Error de conexión al eliminar", "error");
+            }
+        }
+
+        async function toggleBlockUser(userId, event) {
+            event.stopPropagation(); 
+
+            try {
+                const token = localStorage.getItem("vera_token");
+                const res = await fetch(`/api/admin/users/${userId}/block`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                const data = await res.json();
+                
+                if (data.ok) {
+                    showToast(data.message, "success");
+                    loadAdminData(); // Recargar tabla para actualizar el estado visual
+                } else {
+                    showToast(data.error || "Error al bloquear/desbloquear", "error");
+                }
+            } catch (err) {
+                showToast("Error de conexión al bloquear", "error");
             }
         }
 

@@ -168,5 +168,37 @@ router.delete("/users/:userId", autenticarToken, exigirAdmin, async (req, res) =
         res.status(500).json({ ok: false, error: "Error interno del servidor" });
     }
 });
+/*
+ * BLOQUEAR / DESBLOQUEAR CLIENTE
+ */
+
+router.put("/users/:userId/block", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const userId = Number(req.params.userId);
+
+        if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({ ok: false, error: "ID de usuario inválido" });
+        }
+        
+        // Evitar que el admin se bloquee a sí mismo
+        if (req.user.id === userId || req.user.userId === userId) {
+            return res.status(400).json({ ok: false, error: "No puedes bloquear tu propia cuenta" });
+        }
+
+        const user = await db.prepare("SELECT role FROM users WHERE id = ?").get(userId);
+        if (!user) {
+            return res.status(404).json({ ok: false, error: "Usuario no encontrado" });
+        }
+
+        const newRole = user.role === "blocked" ? "client" : "blocked";
+        await db.prepare("UPDATE users SET role = ? WHERE id = ?").run(newRole, userId);
+
+        res.json({ ok: true, message: \`Usuario \${newRole === "blocked" ? "bloqueado" : "desbloqueado"} correctamente\`, newRole });
+
+    } catch (error) {
+        console.error("Block user error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
 
 module.exports = router;
