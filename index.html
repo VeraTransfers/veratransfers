@@ -178,6 +178,34 @@
             padding: 14px;
             outline: none;
             margin-bottom: 18px;
+            font-family: inherit;
+        }
+
+        .password-wrapper {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .password-wrapper input {
+            margin-bottom: 0;
+            padding-right: 44px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #66736c;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
         }
 
         input:focus {
@@ -1258,12 +1286,15 @@
                     Contraseña
                 </label>
 
-                <input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    required
-                >
+                <div class="password-wrapper">
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        required
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword('password', this)">👁️</button>
+                </div>
 
                 <button
                     class="primary-btn"
@@ -1377,27 +1408,33 @@
                     Contraseña
                 </label>
 
-                <input
-                    id="registerPassword"
-                    type="password"
-                    placeholder="Mínimo 6 caracteres"
-                    autocomplete="new-password"
-                    minlength="6"
-                    required
-                >
+                <div class="password-wrapper">
+                    <input
+                        id="registerPassword"
+                        type="password"
+                        placeholder="Mínimo 6 caracteres"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)">👁️</button>
+                </div>
 
                 <label for="registerPasswordConfirm">
                     Confirmar contraseña
                 </label>
 
-                <input
-                    id="registerPasswordConfirm"
-                    type="password"
-                    placeholder="Repite tu contraseña"
-                    autocomplete="new-password"
-                    minlength="6"
-                    required
-                >
+                <div class="password-wrapper">
+                    <input
+                        id="registerPasswordConfirm"
+                        type="password"
+                        placeholder="Repite tu contraseña"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword('registerPasswordConfirm', this)">👁️</button>
+                </div>
 
                 <button
                     class="primary-btn"
@@ -2457,6 +2494,17 @@
 
             loginMessage.classList.add("hidden");
 
+        }
+        
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                btn.textContent = "🙈"; // Hide icon
+            } else {
+                input.type = "password";
+                btn.textContent = "👁️"; // Show icon
+            }
         }
 
 
