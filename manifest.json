@@ -1,0 +1,21 @@
+{
+  "name": "VeraTransfers",
+  "short_name": "VeraTransfers",
+  "description": "Aplicación de VeraTransfers",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#28a745",
+  "theme_color": "#28a745",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
