@@ -193,7 +193,7 @@ router.put("/users/:userId/block", autenticarToken, exigirAdmin, async (req, res
         const newRole = user.role === "blocked" ? "client" : "blocked";
         await db.prepare("UPDATE users SET role = ? WHERE id = ?").run(newRole, userId);
 
-        res.json({ ok: true, message: \`Usuario \${newRole === "blocked" ? "bloqueado" : "desbloqueado"} correctamente\`, newRole });
+        res.json({ ok: true, message: `Usuario ${newRole === "blocked" ? "bloqueado" : "desbloqueado"} correctamente`, newRole });
 
     } catch (error) {
         console.error("Block user error:", error);
