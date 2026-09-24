@@ -515,7 +515,7 @@ router.get(
 // SIMULAR USO DE CRÉDITO (SANDBOX)
 // =====================================================
 
-router.post("/spend-credit", autenticarToken, async (req, res) => {
+router.post("/spend-credit", authenticate, async (req, res) => {
     try {
         const { amount } = req.body;
         
@@ -523,14 +523,14 @@ router.post("/spend-credit", autenticarToken, async (req, res) => {
             return res.status(400).json({ ok: false, error: "Monto inválido" });
         }
 
-        const account = await db.prepare("SELECT id FROM accounts WHERE user_id = ?").get(req.usuario.id);
+        const account = await db.prepare("SELECT id FROM accounts WHERE user_id = ?").get(req.user.id);
         
         if (!account) {
             return res.status(404).json({ ok: false, error: "Cuenta no encontrada" });
         }
 
         const result = await simulateCreditPurchase({
-            userId: req.usuario.id,
+            userId: req.user.id,
             accountId: account.id,
             amount: Number(amount)
         });
