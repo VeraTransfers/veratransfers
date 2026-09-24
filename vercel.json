@@ -6,15 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "style.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "script.js",
+      "src": "*.{html,css,js,jpg,png,json,ico}",
       "use": "@vercel/static"
     }
   ],
@@ -24,7 +16,7 @@
       "dest": "server/server.js"
     },
     {
-      "src": "/(.*)\\.(css|js|png|jpg|jpeg|svg|ico)",
+      "src": "/(.*)\\.(css|js|png|jpg|jpeg|svg|ico|json)",
       "dest": "/$1.$2"
     },
     {
