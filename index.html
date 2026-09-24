@@ -136,22 +136,58 @@
 
         @media (max-width: 899px) {
             .auth-brand-mobile {
-                display: block;
-                text-align: center;
+                display: none; /* Reemplazado por auth-mobile-hero */
             }
             
             .auth-split {
                 background: linear-gradient(rgba(8, 122, 77, 0.85), rgba(17, 29, 24, 0.95)), url('/login_bg.jpg') no-repeat center center;
                 background-size: cover;
+                align-items: center;
+            }
+
+            .auth-form-container {
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 40px;
+            }
+
+            .auth-mobile-hero {
+                display: block;
+                text-align: center;
+                color: white;
+                margin-bottom: 20px;
+                padding: 0 15px;
+            }
+            .auth-mobile-hero .brand {
+                color: white;
+                font-size: 36px;
+                text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            }
+            .auth-mobile-hero h2 {
+                font-size: 19px;
+                margin: 8px 0;
+                font-weight: 600;
+                text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+            }
+            .auth-mobile-hero p {
+                font-size: 14px;
+                margin: 0;
+                opacity: 0.9;
+                line-height: 1.4;
             }
 
             .auth-split .login-card {
                 padding: 35px 25px;
                 background: rgba(255, 255, 255, 0.96);
                 box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-                margin: 20px;
+                margin: 10px 20px 30px;
                 border-radius: 20px;
+                width: calc(100% - 40px);
             }
+        }
+        
+        .auth-mobile-hero {
+            display: none;
         }
 
         .login-card {
@@ -1275,6 +1311,13 @@
         </div>
 
         <div class="auth-form-container">
+            
+            <div class="auth-mobile-hero">
+                <div class="brand">VeraTransfers</div>
+                <h2>Billetera oficial de Avanza Financial</h2>
+                <p>Transferencias seguras, recepción de préstamos y administración de fondos con cifrado de grado bancario.</p>
+            </div>
+
             <div class="login-card">
 
                 <div class="brand auth-brand-mobile">VeraTransfers</div>
@@ -1376,6 +1419,13 @@
         </div>
 
         <div class="auth-form-container">
+            
+            <div class="auth-mobile-hero">
+                <div class="brand">VeraTransfers</div>
+                <h2>Billetera oficial de Avanza Financial</h2>
+                <p>Transferencias seguras, recepción de préstamos y administración de fondos con cifrado de grado bancario.</p>
+            </div>
+
             <div class="login-card">
 
                 <div class="brand auth-brand-mobile">VeraTransfers</div>
