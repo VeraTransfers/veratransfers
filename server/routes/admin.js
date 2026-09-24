@@ -113,7 +113,7 @@ router.post("/accounts/:accountId/credit", autenticarToken, exigirAdmin, async (
             adminUserId: req.user.id || req.user.userId || null,
             accountId: accountId,
             amount: amount,
-            currency: "USD",
+            currency: account.currency,
             concept: description
         });
 

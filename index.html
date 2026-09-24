@@ -1502,6 +1502,15 @@
                     <button type="button" class="toggle-password" onclick="togglePassword('registerPasswordConfirm', this)">👁️</button>
                 </div>
 
+                <label for="registerCurrency">
+                    Moneda Principal
+                </label>
+                <select id="registerCurrency" required>
+                    <option value="USD" selected>Dólares (USD)</option>
+                    <option value="COP">Pesos Colombianos (COP)</option>
+                    <option value="MXN">Pesos Mexicanos (MXN)</option>
+                </select>
+
                 <button
                     class="primary-btn"
                     type="submit"
@@ -2082,7 +2091,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="transferAmount">Monto (USD)</label>
+                                <label for="transferAmount">Monto</label>
                                 <input
                                     id="transferAmount"
                                     type="number"
@@ -2264,7 +2273,7 @@
                         </div>
 
                         <form id="guaranteeForm" style="display: flex; gap: 10px;">
-                            <input type="number" id="guaranteeAmount" min="1" step="0.01" placeholder="Monto a reservar (USD)" style="flex: 1;" required>
+                            <input type="number" id="guaranteeAmount" min="1" step="0.01" placeholder="Monto a reservar" style="flex: 1;" required>
                             <button type="submit" class="profile-save-btn" style="margin: 0; padding: 10px 20px;">Reservar</button>
                         </form>
                         
@@ -2277,7 +2286,7 @@
                             Realiza pagos a tu tarjeta de crédito desde tu saldo disponible para liberar tu límite.
                         </p>
                         <form id="payCreditForm" style="display: flex; gap: 10px;">
-                            <input type="number" id="payCreditAmount" min="1" step="0.01" placeholder="Monto a pagar (USD)" style="flex: 1;" required>
+                            <input type="number" id="payCreditAmount" min="1" step="0.01" placeholder="Monto a pagar" style="flex: 1;" required>
                             <button type="submit" class="profile-save-btn" style="margin: 0; padding: 10px 20px; background: #111d18;">Pagar</button>
                         </form>
                         <div id="payCreditMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
@@ -2289,7 +2298,7 @@
                             Utiliza tu tarjeta para generar movimientos y utilizar el crédito otorgado. No puedes exceder tu límite.
                         </p>
                         <form id="spendCreditForm" style="display: flex; gap: 10px;">
-                            <input type="number" id="spendCreditAmount" min="1" step="0.01" placeholder="Monto a gastar (USD)" style="flex: 1;" required>
+                            <input type="number" id="spendCreditAmount" min="1" step="0.01" placeholder="Monto a gastar" style="flex: 1;" required>
                             <button type="submit" class="profile-save-btn" style="margin: 0; padding: 10px 20px; background: #b91c1c; border-color: #b91c1c; color:white;">Simular Gasto</button>
                         </form>
                         <div id="spendCreditMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
@@ -2466,7 +2475,7 @@
                             <div>
 
                                 <label for="creditAmount">
-                                    Monto USD
+                                    Monto
                                 </label>
 
                                 <input
@@ -2653,16 +2662,17 @@
         }
 
 
-        function formatUSD(cents) {
-
+        function formatUSD(cents, curr) {
+            const c = curr || (state.account && state.account.currency) || "USD";
+            const locale = c === "COP" ? "es-CO" : c === "MXN" ? "es-MX" : "en-US";
             return new Intl.NumberFormat(
-                "en-US",
+                locale,
                 {
                     style: "currency",
-                    currency: "USD"
+                    currency: c,
+                    minimumFractionDigits: c === "COP" ? 0 : 2
                 }
             ).format(cents / 100);
-
         }
 
 
@@ -3954,6 +3964,7 @@ function escapeHtml(value) {
                                         name,
                                         email,
                                         password,
+                                        currency: document.getElementById("registerCurrency").value,
                                         phone: document.getElementById("registerPhone").value,
                                         country_code: itiRegister ? itiRegister.getSelectedCountryData().iso2.toUpperCase() : null,
                                         dial_code: itiRegister ? "+" + itiRegister.getSelectedCountryData().dialCode : null,

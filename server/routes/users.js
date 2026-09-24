@@ -49,7 +49,11 @@ function exigirAdmin(req, res, next) {
 
 router.post("/", async (req, res) => {
     try {
-        const { name, email, password, phone, country_code, dial_code, phone_e164 } = req.body;
+        let { name, email, password, phone, country_code, dial_code, phone_e164, currency } = req.body;
+
+        if (!currency || !["USD", "COP", "MXN"].includes(currency)) {
+            currency = "USD";
+        }
 
         if (!name || !email || !password) {
             return res.status(400).json({
@@ -105,8 +109,8 @@ router.post("/", async (req, res) => {
 
             await tx.prepare(`
                 INSERT INTO accounts (user_id, balance_cents, currency)
-                VALUES (?, 0, 'USD')
-            `).run(userId);
+                VALUES (?, 0, ?)
+            `).run(userId, currency);
 
             return userId;
         });

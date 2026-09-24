@@ -84,7 +84,7 @@ async function creditTestFunds({
 }) {
     const amountCents = moneyToCents(amount);
 
-    if (currency !== "USD") {
+    if (!["USD", "COP", "MXN"].includes(currency)) {
         throw new Error("UNSUPPORTED_CURRENCY");
     }
 
@@ -202,7 +202,7 @@ async function transferBetweenAccounts({
 }) {
     const amountCents = moneyToCents(amount);
 
-    if (currency !== "USD") {
+    if (!["USD", "COP", "MXN"].includes(currency)) {
         throw new Error("UNSUPPORTED_CURRENCY");
     }
 
@@ -232,6 +232,10 @@ async function transferBetweenAccounts({
 
         if (destination.status !== "active") {
             throw new Error("DESTINATION_ACCOUNT_NOT_ACTIVE");
+        }
+
+        if (source.currency !== destination.currency) {
+            throw new Error("CURRENCY_MISMATCH");
         }
 
         if (source.available_balance_cents < amountCents) {
@@ -384,7 +388,7 @@ async function transferBetweenAccounts({
 async function allocateGuarantee({ userId, accountId, amount, currency = "USD" }) {
     const amountCents = moneyToCents(amount);
 
-    if (currency !== "USD") {
+    if (!["USD", "COP", "MXN"].includes(currency)) {
         throw new Error("UNSUPPORTED_CURRENCY");
     }
 
@@ -463,7 +467,7 @@ async function allocateGuarantee({ userId, accountId, amount, currency = "USD" }
 async function simulateCreditPayment({ userId, accountId, amount, currency = "USD" }) {
     const amountCents = moneyToCents(amount);
 
-    if (currency !== "USD") {
+    if (!["USD", "COP", "MXN"].includes(currency)) {
         throw new Error("UNSUPPORTED_CURRENCY");
     }
 
@@ -544,7 +548,7 @@ async function simulateCreditPayment({ userId, accountId, amount, currency = "US
 async function simulateCreditPurchase({ userId, accountId, amount, currency = "USD" }) {
     const amountCents = moneyToCents(amount);
 
-    if (currency !== "USD") {
+    if (!["USD", "COP", "MXN"].includes(currency)) {
         throw new Error("UNSUPPORTED_CURRENCY");
     }
 
