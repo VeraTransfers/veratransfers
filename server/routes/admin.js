@@ -59,10 +59,15 @@ router.get("/clients", autenticarToken, exigirAdmin, async (req, res) => {
                 users.created_at,
                 accounts.id AS account_id,
                 accounts.balance_cents,
-                accounts.currency
+                accounts.currency,
+                cards.id AS card_id,
+                cards.status AS card_status,
+                cards.last4 AS card_last4
             FROM users
             INNER JOIN accounts
                 ON accounts.user_id = users.id
+            LEFT JOIN cards
+                ON cards.account_id = accounts.id
             ORDER BY users.id DESC
         `).all();
 

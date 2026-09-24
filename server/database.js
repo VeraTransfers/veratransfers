@@ -38,6 +38,7 @@ async function initDB() {
                 balance_cents INTEGER NOT NULL DEFAULT 0,
                 available_balance_cents INTEGER NOT NULL DEFAULT 0,
                 pending_balance_cents INTEGER NOT NULL DEFAULT 0,
+                guarantee_balance_cents INTEGER NOT NULL DEFAULT 0,
                 currency TEXT NOT NULL DEFAULT 'USD',
                 account_number TEXT,
                 status TEXT NOT NULL DEFAULT 'active',
@@ -66,6 +67,8 @@ async function initDB() {
                 status TEXT NOT NULL DEFAULT 'active',
                 card_number TEXT,
                 cvv TEXT,
+                credit_limit_cents INTEGER NOT NULL DEFAULT 0,
+                credit_used_cents INTEGER NOT NULL DEFAULT 0,
                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             );
 

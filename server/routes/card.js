@@ -131,7 +131,7 @@ router.post("/request", autenticarToken, async (req, res) => {
                 cvv,
                 status
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'active')
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
         `).run(
             userId,
             account.id,
@@ -174,6 +174,41 @@ router.post("/request", autenticarToken, async (req, res) => {
     }
 });
 
+
+// =====================================================
+// CAMBIAR ESTADO DE TARJETA (ADMIN)
+// =====================================================
+
+router.patch("/:id/status", autenticarToken, async (req, res) => {
+    try {
+        if (req.usuario.role !== "admin") {
+            return res.status(403).json({ ok: false, error: "Administrador requerido" });
+        }
+
+        const { status } = req.body;
+        const cardId = req.params.id;
+
+        const validStatuses = ["pending", "approved", "shipped", "delivered", "rejected", "active"];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ ok: false, error: "Estado inválido" });
+        }
+
+        const result = await db.prepare(`
+            UPDATE cards
+            SET status = ?
+            WHERE id = ?
+        `).run(status, cardId);
+
+        if (result.changes === 0) {
+            return res.status(404).json({ ok: false, error: "Tarjeta no encontrada" });
+        }
+
+        res.json({ ok: true, message: "Estado de la tarjeta actualizado" });
+    } catch (error) {
+        console.error("Error al actualizar tarjeta:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
 
 // =====================================================
 // EXPORTAR ROUTER

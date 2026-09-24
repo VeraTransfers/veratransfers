@@ -6,7 +6,10 @@ const {
     getAccount,
     getAccountByNumber,
     creditTestFunds,
-    transferBetweenAccounts
+    transferBetweenAccounts,
+    allocateGuarantee,
+    simulateCreditPayment,
+    simulateCreditPurchase
 } = require("../financial");
 
 const router = express.Router();
@@ -64,12 +67,19 @@ router.get("/account", authenticate, async (req, res) => {
                 a.balance_cents,
                 a.available_balance_cents,
                 a.pending_balance_cents,
+                a.guarantee_balance_cents,
                 a.currency,
                 a.status,
                 a.created_at,
                 a.updated_at
             FROM accounts a
             WHERE a.user_id = ?
+        `).get(req.user.userId);
+        
+        const card = await db.prepare(`
+            SELECT credit_limit_cents, credit_used_cents
+            FROM cards
+            WHERE user_id = ?
         `).get(req.user.userId);
 
         const user = await db.prepare(`
@@ -117,11 +127,17 @@ router.get("/account", authenticate, async (req, res) => {
                 balance: account.balance_cents / 100,
                 available_balance: account.available_balance_cents / 100,
                 pending_balance: account.pending_balance_cents / 100,
+                guarantee_balance: (account.guarantee_balance_cents || 0) / 100,
                 currency: account.currency,
                 status: account.status,
                 created_at: account.created_at,
                 updated_at: account.updated_at
-            }
+            },
+            credit: card ? {
+                limit: card.credit_limit_cents / 100,
+                used: card.credit_used_cents / 100,
+                available: (card.credit_limit_cents - card.credit_used_cents) / 100
+            } : null
         });
 
     } catch (error) {
@@ -193,6 +209,72 @@ router.get("/movements", authenticate, async (req, res) => {
             ok: false,
             error: "INTERNAL_ERROR"
         });
+    }
+});
+
+// ============================================================
+// GARANTÍA DE CRÉDITO
+// ============================================================
+
+router.post("/guarantee", authenticate, async (req, res) => {
+    try {
+        const { amount } = req.body || {};
+
+        if (!amount || amount <= 0) {
+            return res.status(400).json({ ok: false, error: "INVALID_AMOUNT" });
+        }
+
+        const account = await db.prepare(`SELECT id FROM accounts WHERE user_id = ?`).get(req.user.userId);
+        if (!account) return res.status(404).json({ ok: false, error: "ACCOUNT_NOT_FOUND" });
+
+        const result = await allocateGuarantee({
+            userId: req.user.userId,
+            accountId: account.id,
+            amount: amount,
+            currency: "USD"
+        });
+
+        res.status(201).json({
+            ok: true,
+            transaction: result
+        });
+
+    } catch (error) {
+        console.error("POST /finance/guarantee:", error);
+        res.status(500).json({ ok: false, error: error.message || "INTERNAL_ERROR" });
+    }
+});
+
+// ============================================================
+// PAGO DE CRÉDITO
+// ============================================================
+
+router.post("/pay-credit", authenticate, async (req, res) => {
+    try {
+        const { amount } = req.body || {};
+
+        if (!amount || amount <= 0) {
+            return res.status(400).json({ ok: false, error: "INVALID_AMOUNT" });
+        }
+
+        const account = await db.prepare(`SELECT id FROM accounts WHERE user_id = ?`).get(req.user.userId);
+        if (!account) return res.status(404).json({ ok: false, error: "ACCOUNT_NOT_FOUND" });
+
+        const result = await simulateCreditPayment({
+            userId: req.user.userId,
+            accountId: account.id,
+            amount: amount,
+            currency: "USD"
+        });
+
+        res.status(201).json({
+            ok: true,
+            transaction: result
+        });
+
+    } catch (error) {
+        console.error("POST /finance/pay-credit:", error);
+        res.status(500).json({ ok: false, error: error.message || "INTERNAL_ERROR" });
     }
 });
 
@@ -428,5 +510,40 @@ router.get(
         }
     }
 );
+
+// =====================================================
+// SIMULAR USO DE CRÉDITO (SANDBOX)
+// =====================================================
+
+router.post("/spend-credit", autenticarToken, async (req, res) => {
+    try {
+        const { amount } = req.body;
+        
+        if (!amount || amount <= 0) {
+            return res.status(400).json({ ok: false, error: "Monto inválido" });
+        }
+
+        const account = await db.prepare("SELECT id FROM accounts WHERE user_id = ?").get(req.usuario.id);
+        
+        if (!account) {
+            return res.status(404).json({ ok: false, error: "Cuenta no encontrada" });
+        }
+
+        const result = await simulateCreditPurchase({
+            userId: req.usuario.id,
+            accountId: account.id,
+            amount: Number(amount)
+        });
+
+        res.json({
+            ok: true,
+            message: "Compra simulada correctamente",
+            transaction: result
+        });
+    } catch (error) {
+        console.error("Error en simulación de compra:", error);
+        res.status(400).json({ ok: false, error: error.message });
+    }
+});
 
 module.exports = router;
