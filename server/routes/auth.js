@@ -235,13 +235,8 @@ router.post("/forgot-password", async (req, res) => {
 
         res.json({
             ok: true,
-            sandbox: true,
-            sandboxMessage:
-                "MODO SANDBOX — Este token se muestra únicamente " +
-                "para pruebas. En producción será enviado por correo electrónico.",
-            token,
-            expiresAt,
-            userEmail: normalizedEmail
+            sandbox: false,
+            message: "Si el correo existe en nuestra base de datos, hemos enviado las instrucciones para restablecer la contraseña."
         });
 
     } catch (error) {
