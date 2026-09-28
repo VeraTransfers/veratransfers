@@ -1782,6 +1782,19 @@
             </div>
 
             <div class="header-user">
+                
+                <!-- Notificaciones (Bell) -->
+                <div style="position: relative; cursor: pointer; display: flex; align-items: center;" id="notificationBellBtn">
+                    <span style="font-size: 20px;">🔔</span>
+                    <span id="notifBadge" style="position: absolute; top: -5px; right: -8px; background: #b91c1c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; display: none;">0</span>
+                    
+                    <div id="notifDropdown" class="hidden" style="position: absolute; top: 35px; right: 0; width: 300px; background: white; border: 1px solid #e2e9e5; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100;">
+                        <div style="padding: 12px; border-bottom: 1px solid #e2e9e5; font-weight: bold; color: #17231d;">Notificaciones</div>
+                        <div id="notifList" style="max-height: 300px; overflow-y: auto; padding: 0;">
+                            <div style="padding: 12px; text-align: center; color: #69756f; font-size: 13px;">No tienes notificaciones.</div>
+                        </div>
+                    </div>
+                </div>
 
                 <span
                     id="headerUserName"
@@ -2256,6 +2269,7 @@
 
                 <!-- TAB: CRÉDITO -->
                 <div id="tabCredito" class="tab-panel">
+
                     <div class="panel" style="margin-bottom: 20px;">
                         <div class="panel-title">Construye tu Crédito</div>
                         <p style="color:#69756f;font-size:14px;margin-top:0;">
@@ -2304,6 +2318,27 @@
                         <div id="guaranteeMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
                     </div>
                     
+                    <div class="panel" style="margin-bottom: 20px;">
+                        <div class="panel-title">Pagar Cuota de Crédito</div>
+                        <p style="color:#69756f;font-size:14px;margin-top:0;">
+                            Realiza el pago de la cuota mensual de tu préstamo seleccionando tu método de pago preferido.
+                        </p>
+                        <form id="payLoanForm" style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; gap: 10px;">
+                                <select id="payLoanMethod" style="flex: 1; padding: 10px; border: 1px solid #d8e1dc; border-radius: 10px; outline: none; background: white;" required>
+                                    <option value="" disabled selected>Selecciona medio de pago...</option>
+                                    <option value="saldo">Saldo VeraTransfers</option>
+                                    <option value="banco">Transferencia Bancaria (ACH)</option>
+                                    <option value="walmart">En efectivo (Tienda Walmart)</option>
+                                    <option value="cvs">En efectivo (CVS Pharmacy)</option>
+                                </select>
+                                <input type="number" id="payLoanAmount" min="1" step="0.01" placeholder="Monto a pagar ($)" style="flex: 1; padding: 10px; border: 1px solid #d8e1dc; border-radius: 10px; outline: none;" required>
+                            </div>
+                            <button type="submit" class="profile-save-btn" style="margin: 0; padding: 12px; background: #087a4d;">Pagar Cuota</button>
+                        </form>
+                        <div id="payLoanMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
+                    </div>
+
                     <div class="panel">
                         <div class="panel-title">Pagar Tarjeta</div>
                         <p style="color:#69756f;font-size:14px;margin-top:0;">
@@ -2546,6 +2581,30 @@
                         class="admin-message"
                     ></div>
 
+                </div>
+
+                <!-- ENVIAR NOTIFICACIÓN -->
+                <div class="admin-section panel">
+                    <div class="panel-title">
+                        Enviar Notificación
+                    </div>
+                    <div style="color:#69756f;margin-bottom:18px;">
+                        Selecciona un cliente de la tabla de arriba.
+                    </div>
+                    <form id="adminNotificationForm">
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Título de la notificación</label>
+                            <input type="text" id="notifTitle" placeholder="Ej. Préstamo Pre-aprobado" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Mensaje</label>
+                            <input type="text" id="notifMessage" placeholder="Ej. Tienes un préstamo pre-aprobado de $5,000" required>
+                        </div>
+                        <button type="submit" class="request-btn" id="notifBtn" disabled>
+                            Enviar notificación
+                        </button>
+                    </form>
+                    <div id="notifMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
                 </div>
 
 
@@ -4648,6 +4707,36 @@ function escapeHtml(value) {
         });
     }
 
+    const payLoanForm = document.getElementById("payLoanForm");
+    const payLoanMsg = document.getElementById("payLoanMsg");
+
+    if (payLoanForm) {
+        payLoanForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const method = document.getElementById("payLoanMethod").value;
+            const amount = Number(document.getElementById("payLoanAmount").value);
+            
+            if (!method) {
+                payLoanMsg.textContent = "Por favor selecciona un método de pago.";
+                payLoanMsg.className = "profile-msg error";
+                payLoanMsg.classList.remove("hidden");
+                return;
+            }
+
+            payLoanMsg.textContent = "Procesando...";
+            payLoanMsg.className = "profile-msg";
+            payLoanMsg.classList.remove("hidden");
+
+            // Simular pago de cuota
+            setTimeout(() => {
+                payLoanMsg.textContent = "Cuota pagada exitosamente mediante: " + (method === "saldo" ? "Saldo VeraTransfers" : method);
+                payLoanMsg.className = "profile-msg success";
+                payLoanForm.reset();
+                showToast("Cuota pagada", "success");
+            }, 1000);
+        });
+    }
+
     const payCreditForm = document.getElementById("payCreditForm");
     const payCreditMsg = document.getElementById("payCreditMsg");
 
@@ -4720,6 +4809,130 @@ function escapeHtml(value) {
             } catch (err) {
                 spendCreditMsg.textContent = "Error de conexión.";
                 spendCreditMsg.className = "profile-msg error";
+            }
+        });
+    }
+
+    // =====================================
+    // NOTIFICACIONES (CLIENT & ADMIN)
+    // =====================================
+
+    const notifBellBtn = document.getElementById("notificationBellBtn");
+    const notifDropdown = document.getElementById("notifDropdown");
+    const notifBadge = document.getElementById("notifBadge");
+    const notifList = document.getElementById("notifList");
+    const notifBtn = document.getElementById("notifBtn");
+
+    if (notifBellBtn) {
+        notifBellBtn.addEventListener("click", async () => {
+            notifDropdown.classList.toggle("hidden");
+            if (!notifDropdown.classList.contains("hidden") && notifBadge.textContent !== "0") {
+                try {
+                    const token = localStorage.getItem("vera_token");
+                    await fetch("/api/finance/notifications/read", { method: "POST", headers: { "Authorization": "Bearer " + token } });
+                    notifBadge.style.display = "none";
+                    notifBadge.textContent = "0";
+                } catch(e) {}
+            }
+        });
+    }
+
+    window.fetchClientNotifications = async function() {
+        if (!notifBadge) return;
+        try {
+            const token = localStorage.getItem("vera_token");
+            if (!token) return;
+            const res = await fetch("/api/finance/notifications", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+            if (data.ok && data.notifications) {
+                const unread = data.notifications.filter(n => !n.read_at).length;
+                if (unread > 0) {
+                    notifBadge.textContent = unread;
+                    notifBadge.style.display = "block";
+                } else {
+                    notifBadge.style.display = "none";
+                }
+
+                if (data.notifications.length === 0) {
+                    notifList.innerHTML = '<div style="padding: 12px; text-align: center; color: #69756f; font-size: 13px;">No tienes notificaciones.</div>';
+                } else {
+                    notifList.innerHTML = data.notifications.map(n => `
+                        <div style="padding: 10px 12px; border-bottom: 1px solid #f0f8f4; ${!n.read_at ? 'background: #fdfaf6;' : ''}">
+                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 4px; color: #087a4d;">${escapeHtml(n.title)}</div>
+                            <div style="font-size: 13px; color: #4a5e55;">${escapeHtml(n.message)}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+        } catch(e) {}
+    };
+
+    // Auto-fetch client notifications if logged in as client
+    setInterval(() => {
+        if (state.user && state.user.role === 'client') {
+            window.fetchClientNotifications();
+        }
+    }, 15000);
+    // Initial fetch
+    setTimeout(() => {
+        if (state.user && state.user.role === 'client') {
+            window.fetchClientNotifications();
+        }
+    }, 2000);
+
+
+    const adminNotificationForm = document.getElementById("adminNotificationForm");
+    const notifMsg = document.getElementById("notifMsg");
+    if (adminNotificationForm) {
+        // Habilitar botón si hay cliente seleccionado
+        setInterval(() => {
+            if (state.selectedClient) {
+                notifBtn.disabled = false;
+            } else {
+                notifBtn.disabled = true;
+            }
+        }, 1000);
+
+        adminNotificationForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!state.selectedClient) {
+                notifMsg.textContent = "Por favor selecciona un cliente de la tabla primero.";
+                notifMsg.className = "profile-msg error";
+                notifMsg.classList.remove("hidden");
+                return;
+            }
+
+            notifMsg.textContent = "Enviando...";
+            notifMsg.className = "profile-msg";
+            notifMsg.classList.remove("hidden");
+
+            try {
+                const token = localStorage.getItem("vera_token");
+                const res = await fetch("/api/admin/notifications", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({
+                        userId: state.selectedClient.id,
+                        title: document.getElementById("notifTitle").value,
+                        message: document.getElementById("notifMessage").value,
+                        type: "info"
+                    })
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    notifMsg.textContent = "Notificación enviada exitosamente.";
+                    notifMsg.className = "profile-msg success";
+                    adminNotificationForm.reset();
+                    showToast("Notificación enviada", "success");
+                } else {
+                    notifMsg.textContent = data.error || "Error al enviar notificación.";
+                    notifMsg.className = "profile-msg error";
+                }
+            } catch(e) {
+                notifMsg.textContent = "Error de conexión.";
+                notifMsg.className = "profile-msg error";
             }
         });
     }

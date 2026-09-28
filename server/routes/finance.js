@@ -382,6 +382,20 @@ router.get("/notifications", authenticate, async (req, res) => {
     }
 });
 
+router.post("/notifications/read", authenticate, async (req, res) => {
+    try {
+        await db.prepare(`
+            UPDATE notifications
+            SET read_at = CURRENT_TIMESTAMP
+            WHERE user_id = ? AND read_at IS NULL
+        `).run(req.user.userId);
+        res.json({ ok: true });
+    } catch (error) {
+        console.error("POST /finance/notifications/read:", error);
+        res.status(500).json({ ok: false, error: "INTERNAL_ERROR" });
+    }
+});
+
 // ============================================================
 // ADMIN — ACREDITAR FONDOS DE PRUEBA
 // ============================================================

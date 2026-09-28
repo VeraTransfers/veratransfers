@@ -206,4 +206,28 @@ router.put("/users/:userId/block", autenticarToken, exigirAdmin, async (req, res
     }
 });
 
+/*
+ * ENVIAR NOTIFICACIÓN
+ */
+
+router.post("/notifications", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const { userId, type, title, message } = req.body;
+        
+        if (!userId || !title || !message) {
+            return res.status(400).json({ ok: false, error: "Faltan campos requeridos" });
+        }
+
+        await db.prepare(`
+            INSERT INTO notifications (user_id, type, title, message)
+            VALUES (?, ?, ?, ?)
+        `).run(userId, type || "info", title, message);
+
+        res.json({ ok: true, message: "Notificación enviada" });
+    } catch (error) {
+        console.error("Send notification error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
+
 module.exports = router;
