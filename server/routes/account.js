@@ -101,5 +101,26 @@ router.get("/", autenticarToken, async (req, res) => {
     }
 });
 
+const fs = require('fs');
+const path = require('path');
+
+router.post("/upload", autenticarToken, async (req, res) => {
+    try {
+        const { type, file, filename } = req.body;
+        if (!file || !type) {
+            return res.status(400).json({ ok: false, error: "Missing file or type" });
+        }
+        
+        await db.prepare(`
+            INSERT INTO documents (user_id, type, filename, base64_data)
+            VALUES (?, ?, ?, ?)
+        `).run(req.user.userId, type, filename || "document.jpg", file);
+        
+        res.json({ ok: true, message: "Document uploaded successfully" });
+    } catch (error) {
+        console.error("Upload error:", error);
+        res.status(500).json({ ok: false, error: "Internal server error" });
+    }
+});
 
 module.exports = router;

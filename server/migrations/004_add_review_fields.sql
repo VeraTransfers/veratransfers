@@ -1,0 +1,2 @@
+ALTER TABLE documents ADD COLUMN IF NOT EXISTS review_message TEXT;
+ALTER TABLE documents ADD COLUMN IF NOT EXISTS reviewer_id INTEGER REFERENCES users(id);

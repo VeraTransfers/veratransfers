@@ -2265,6 +2265,50 @@
 
                     </div>
 
+                    <div class="panel" style="margin-top: 20px;">
+                        <div class="panel-title" style="margin-bottom:18px;">Subir Documentos</div>
+                        <div style="color:#69756f; font-size:13px; margin-bottom:15px;">Sube o toma una foto de tu identificación oficial y un comprobante de domicilio (Bill).</div>
+                        
+                        <div class="form-group full-width" style="margin-bottom: 15px;">
+                            <label for="documentType">Tipo de documento</label>
+                            <select id="documentType" required style="width: 100%; padding: 12px; border: 1px solid #d5e0da; border-radius: 10px; background: #fff; font-size: 15px;">
+                                <option value="id">Identificación Oficial</option>
+                                <option value="proof_of_address">Comprobante de Domicilio (Bill)</option>
+                                <option value="other">Otro</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                            <button type="button" id="startCameraBtn" style="flex:1; min-width:140px; padding:10px; border:1px solid #087a4d; background:#e9f5ee; border-radius:10px; cursor:pointer; color:#087a4d; font-weight:bold;">📷 Tomar foto ahora</button>
+                            <button type="button" id="selectFileBtn" style="flex:1; min-width:140px; padding:10px; border:1px solid #d5e0da; background:#fff; border-radius:10px; cursor:pointer; color:#4a5e55; font-weight:bold;">📁 Seleccionar archivo</button>
+                            <input type="file" id="documentFile" accept="image/*" class="hidden">
+                        </div>
+
+                        <!-- Video Camera UI -->
+                        <div id="cameraContainer" class="hidden" style="margin-bottom: 15px; border: 1px solid #d5e0da; border-radius: 10px; padding: 10px; background: #fff; text-align:center;">
+                            <video id="cameraVideo" style="width: 100%; max-width: 400px; border-radius: 8px; display: none; margin: 0 auto;" autoplay playsinline></video>
+                            <canvas id="cameraCanvas" style="display: none; width: 100%; max-width: 400px; border-radius: 8px; margin: 0 auto;"></canvas>
+                            <div style="margin-top: 10px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                                <button type="button" id="captureBtn" style="padding: 10px 20px; border:none; background:#087a4d; color:white; border-radius:8px; cursor:pointer; display:none;">📸 Capturar</button>
+                                <button type="button" id="retakeBtn" style="padding: 10px 20px; border:1px solid #d5e0da; background:#fff; color:#4a5e55; border-radius:8px; cursor:pointer; display:none;">🔄 Repetir</button>
+                                <button type="button" id="switchCameraBtn" style="padding: 10px 20px; border:1px solid #d5e0da; background:#f4f7f5; color:#4a5e55; border-radius:8px; cursor:pointer; display:none;">🔄 Girar</button>
+                                <button type="button" id="cancelCameraBtn" style="padding: 10px 20px; border:none; background:#d9534f; color:white; border-radius:8px; cursor:pointer;">❌ Cancelar</button>
+                            </div>
+                            <div id="cameraError" style="color: #d9534f; margin-top: 10px; font-size: 13px; display:none;">
+                                Permiso denegado. Por favor habilite el acceso a la cámara en los permisos de su navegador e intente nuevamente.
+                            </div>
+                        </div>
+
+                        <!-- Preview UI -->
+                        <div id="previewContainer" class="hidden" style="margin-bottom: 15px; text-align: center;">
+                            <img id="filePreview" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #d5e0da;" />
+                        </div>
+
+                        <button type="button" class="profile-save-btn hidden" id="uploadDocumentBtn" style="margin-top: 5px; width:100%;">Subir Documento</button>
+                        
+                        <div id="documentMsg" class="profile-msg hidden" style="margin-top: 15px;"></div>
+                    </div>
+
                 </div><!-- /tabPerfil -->
 
                 <!-- TAB: CRÉDITO -->
@@ -2470,6 +2514,38 @@
                             <tbody
                                 id="clientsTableBody"
                             >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- DOCUMENTOS DE CLIENTES -->
+
+                <div class="admin-section panel">
+
+                    <div class="panel-title">
+                        Documentos de clientes
+                    </div>
+
+                    <div style="overflow-x:auto;">
+
+                        <table class="clients-table">
+
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo de documento</th>
+                                    <th>Fecha y hora</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="documentsTableBody">
                             </tbody>
 
                         </table>
@@ -5104,12 +5180,353 @@ function escapeHtml(value) {
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the A2HS prompt');
-      } else {
-        console.log('User dismissed the A2HS prompt');
       }
       deferredPrompt = null;
     });
   });
+</script>
+
+<script>
+    // Real Camera & Document Upload Logic
+    const startCameraBtn = document.getElementById("startCameraBtn");
+    const selectFileBtn = document.getElementById("selectFileBtn");
+    const fileInput = document.getElementById("documentFile");
+    
+    const cameraContainer = document.getElementById("cameraContainer");
+    const cameraVideo = document.getElementById("cameraVideo");
+    const cameraCanvas = document.getElementById("cameraCanvas");
+    const captureBtn = document.getElementById("captureBtn");
+    const retakeBtn = document.getElementById("retakeBtn");
+    const switchCameraBtn = document.getElementById("switchCameraBtn");
+    const cancelCameraBtn = document.getElementById("cancelCameraBtn");
+    const cameraError = document.getElementById("cameraError");
+    
+    const previewContainer = document.getElementById("previewContainer");
+    const filePreview = document.getElementById("filePreview");
+    const uploadDocumentBtn = document.getElementById("uploadDocumentBtn");
+    const documentType = document.getElementById("documentType");
+    const documentMsg = document.getElementById("documentMsg");
+    
+    let stream = null;
+    let currentImageBase64 = null;
+    let currentFacingMode = "environment";
+
+    async function initCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode } });
+            cameraVideo.srcObject = stream;
+            cameraError.style.display = "none";
+            
+            // Revisa si hay más de una cámara para mostrar el botón
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoInputs = devices.filter(d => d.kind === 'videoinput');
+            if (videoInputs.length > 1) {
+                switchCameraBtn.style.display = "block";
+            } else {
+                switchCameraBtn.style.display = "none";
+            }
+        } catch (err) {
+            console.error(err);
+            cameraVideo.style.display = "none";
+            captureBtn.style.display = "none";
+            switchCameraBtn.style.display = "none";
+            cameraError.style.display = "block";
+        }
+    }
+
+    if (startCameraBtn) {
+        startCameraBtn.addEventListener("click", async () => {
+            cameraContainer.classList.remove("hidden");
+            cameraVideo.style.display = "block";
+            cameraCanvas.style.display = "none";
+            captureBtn.style.display = "block";
+            retakeBtn.style.display = "none";
+            previewContainer.classList.add("hidden");
+            uploadDocumentBtn.classList.add("hidden");
+            
+            await initCamera();
+        });
+
+        if (switchCameraBtn) {
+            switchCameraBtn.addEventListener("click", () => {
+                currentFacingMode = currentFacingMode === "environment" ? "user" : "environment";
+                initCamera();
+            });
+        }
+
+        captureBtn.addEventListener("click", () => {
+            cameraCanvas.width = cameraVideo.videoWidth;
+            cameraCanvas.height = cameraVideo.videoHeight;
+            const ctx = cameraCanvas.getContext("2d");
+            ctx.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+            currentImageBase64 = cameraCanvas.toDataURL("image/jpeg", 0.8);
+            
+            cameraVideo.style.display = "none";
+            cameraCanvas.style.display = "block";
+            captureBtn.style.display = "none";
+            retakeBtn.style.display = "block";
+            uploadDocumentBtn.classList.remove("hidden");
+            
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        });
+
+        retakeBtn.addEventListener("click", () => {
+            startCameraBtn.click();
+        });
+
+        cancelCameraBtn.addEventListener("click", () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            cameraContainer.classList.add("hidden");
+            if (!currentImageBase64 || cameraCanvas.style.display === "none") {
+                uploadDocumentBtn.classList.add("hidden");
+                currentImageBase64 = null;
+            }
+        });
+
+        selectFileBtn.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener("change", (e) => {
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    currentImageBase64 = ev.target.result;
+                    filePreview.src = currentImageBase64;
+                    previewContainer.classList.remove("hidden");
+                    uploadDocumentBtn.classList.remove("hidden");
+                    cameraContainer.classList.add("hidden");
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                        stream = null;
+                    }
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+
+        uploadDocumentBtn.addEventListener("click", async () => {
+            if (!currentImageBase64) return;
+            
+            documentMsg.textContent = "Subiendo documento...";
+            documentMsg.className = "profile-msg";
+            documentMsg.classList.remove("hidden");
+            uploadDocumentBtn.disabled = true;
+            
+            try {
+                const token = localStorage.getItem("vera_token");
+                const res = await fetch("/api/account/upload", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({
+                        type: documentType.value,
+                        file: currentImageBase64,
+                        filename: "document_upload.jpg"
+                    })
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    documentMsg.textContent = "Documento subido exitosamente.";
+                    documentMsg.className = "profile-msg success";
+                    currentImageBase64 = null;
+                    previewContainer.classList.add("hidden");
+                    cameraContainer.classList.add("hidden");
+                    uploadDocumentBtn.classList.add("hidden");
+                    fileInput.value = "";
+                } else {
+                    documentMsg.textContent = data.error || "Error al subir.";
+                    documentMsg.className = "profile-msg error";
+                }
+            } catch(err) {
+                documentMsg.textContent = "Error de red.";
+                documentMsg.className = "profile-msg error";
+            } finally {
+                uploadDocumentBtn.disabled = false;
+            }
+        });
+    }
+</script>
+    <!-- MODAL PARA VER DOCUMENTO (ADMIN) -->
+    <div id="adminDocumentModal" class="modal hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column;">
+        <div style="background:#fff; border-radius:12px; width:90%; max-width:600px; padding:20px; box-shadow:0 4px 15px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="margin:0; color:#17231d;">Revisión de Documento</h3>
+                <button type="button" id="closeAdminDocModal" style="background:none; border:none; font-size:20px; cursor:pointer;">✖</button>
+            </div>
+            
+            <div style="text-align:center; background:#f4f7f5; padding:10px; border-radius:8px; margin-bottom:15px; min-height:200px; display:flex; align-items:center; justify-content:center;">
+                <img id="adminDocImage" style="max-width:100%; max-height:50vh; border-radius:8px;" src="" alt="Cargando documento..." />
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label style="display:block; font-size:13px; font-weight:bold; margin-bottom:5px;">Motivo (si solicita corrección):</label>
+                <textarea id="adminDocMessage" rows="3" style="width:100%; padding:10px; border:1px solid #d5e0da; border-radius:8px; font-family:inherit; resize:vertical;" placeholder="Ej. La fotografía está borrosa. Por favor, vuelva a tomarla..."></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <button type="button" id="adminApproveDocBtn" style="flex:1; padding:12px; background:#087a4d; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">✅ Aprobar</button>
+                <button type="button" id="adminRejectDocBtn" style="flex:1; padding:12px; background:#d9534f; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">❌ Solicitar corrección</button>
+            </div>
+            <div id="adminDocFeedback" class="profile-msg hidden" style="margin-top:10px;"></div>
+        </div>
+    </div>
+
+<script>
+    // Admin Document Logic
+    let currentAdminDocId = null;
+    const adminDocumentModal = document.getElementById("adminDocumentModal");
+    const closeAdminDocModal = document.getElementById("closeAdminDocModal");
+    const adminDocImage = document.getElementById("adminDocImage");
+    const adminDocMessage = document.getElementById("adminDocMessage");
+    const adminApproveDocBtn = document.getElementById("adminApproveDocBtn");
+    const adminRejectDocBtn = document.getElementById("adminRejectDocBtn");
+    const adminDocFeedback = document.getElementById("adminDocFeedback");
+    const documentsTableBody = document.getElementById("documentsTableBody");
+
+    if (closeAdminDocModal) {
+        closeAdminDocModal.addEventListener("click", () => {
+            adminDocumentModal.classList.add("hidden");
+            adminDocumentModal.style.display = "none";
+        });
+    }
+
+    window.fetchAdminDocuments = async function() {
+        if (!documentsTableBody) return;
+        try {
+            const token = localStorage.getItem("vera_token");
+            const res = await fetch("/api/admin/documents", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+            if (data.ok && data.documents) {
+                documentsTableBody.innerHTML = data.documents.map(d => {
+                    const statusColors = {
+                        pending: "#f0ad4e",
+                        approved: "#5cb85c",
+                        rejected: "#d9534f"
+                    };
+                    const typeLabels = {
+                        id: "ID Oficial",
+                        proof_of_address: "Comprobante de Domicilio",
+                        other: "Otro"
+                    };
+                    return `
+                        <tr>
+                            <td>#${d.id}</td>
+                            <td>${d.name} (${d.email})</td>
+                            <td>${typeLabels[d.type] || d.type}</td>
+                            <td>${new Date(d.created_at).toLocaleString()}</td>
+                            <td style="color:${statusColors[d.status] || '#000'}; font-weight:bold;">
+                                ${d.status === 'pending' ? 'Pendiente' : (d.status === 'approved' ? 'Aprobado' : 'Requiere corrección')}
+                            </td>
+                            <td>
+                                <button type="button" class="action-btn" onclick="openAdminDocModal(${d.id})" style="padding:6px 12px; background:#e9f5ee; color:#087a4d; border:1px solid #087a4d; border-radius:6px; cursor:pointer;">Ver documento</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join("");
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    };
+
+    window.openAdminDocModal = async function(id) {
+        currentAdminDocId = id;
+        adminDocumentModal.classList.remove("hidden");
+        adminDocumentModal.style.display = "flex";
+        adminDocImage.src = "";
+        adminDocImage.alt = "Cargando documento...";
+        adminDocFeedback.classList.add("hidden");
+        adminDocMessage.value = "";
+        
+        try {
+            const token = localStorage.getItem("vera_token");
+            const res = await fetch("/api/admin/documents/" + id, {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+            if (data.ok && data.data) {
+                adminDocImage.src = "data:image/jpeg;base64," + data.data;
+            } else {
+                adminDocImage.alt = "Error al cargar la imagen";
+            }
+        } catch(e) {
+            adminDocImage.alt = "Error de red";
+        }
+    };
+
+    async function reviewDocument(status) {
+        if (!currentAdminDocId) return;
+        adminDocFeedback.classList.remove("hidden");
+        adminDocFeedback.className = "profile-msg";
+        adminDocFeedback.textContent = "Procesando...";
+
+        try {
+            const token = localStorage.getItem("vera_token");
+            const res = await fetch("/api/admin/documents/" + currentAdminDocId + "/status", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                body: JSON.stringify({
+                    status: status,
+                    message: adminDocMessage.value
+                })
+            });
+            const data = await res.json();
+            if (data.ok) {
+                adminDocFeedback.className = "profile-msg success";
+                adminDocFeedback.textContent = "Documento actualizado correctamente.";
+                setTimeout(() => {
+                    adminDocumentModal.style.display = "none";
+                    adminDocumentModal.classList.add("hidden");
+                    window.fetchAdminDocuments();
+                }, 1500);
+            } else {
+                adminDocFeedback.className = "profile-msg error";
+                adminDocFeedback.textContent = data.error || "Error al actualizar";
+            }
+        } catch(e) {
+            adminDocFeedback.className = "profile-msg error";
+            adminDocFeedback.textContent = "Error de conexión";
+        }
+    }
+
+    if (adminApproveDocBtn) {
+        adminApproveDocBtn.addEventListener("click", () => reviewDocument("approved"));
+    }
+    if (adminRejectDocBtn) {
+        adminRejectDocBtn.addEventListener("click", () => {
+            if (!adminDocMessage.value.trim()) {
+                adminDocFeedback.classList.remove("hidden");
+                adminDocFeedback.className = "profile-msg error";
+                adminDocFeedback.textContent = "Debe ingresar un motivo para solicitar corrección.";
+                return;
+            }
+            reviewDocument("rejected");
+        });
+    }
+
+    // Auto-fetch admin documents if logged in as admin
+    setInterval(() => {
+        if (typeof state !== 'undefined' && state.user && state.user.role === 'admin') {
+            window.fetchAdminDocuments();
+        }
+    }, 15000);
+    setTimeout(() => {
+        if (typeof state !== 'undefined' && state.user && state.user.role === 'admin') {
+            window.fetchAdminDocuments();
+        }
+    }, 2500);
+
 </script>
 </body>
 </html>

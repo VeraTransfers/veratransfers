@@ -230,4 +230,80 @@ router.post("/notifications", autenticarToken, exigirAdmin, async (req, res) => 
     }
 });
 
+/*
+ * GESTIÓN DE DOCUMENTOS
+ */
+
+router.get("/documents", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const docs = await db.prepare(`
+            SELECT d.id, d.user_id, u.name, u.email, d.type, d.status, d.created_at 
+            FROM documents d
+            JOIN users u ON d.user_id = u.id
+            ORDER BY d.created_at DESC
+        `).all();
+        res.json({ ok: true, documents: docs });
+    } catch (error) {
+        console.error("Get documents error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
+
+router.get("/documents/:id", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const doc = await db.prepare("SELECT base64_data FROM documents WHERE id = ?").get(req.params.id);
+        if (!doc) {
+            return res.status(404).json({ ok: false, error: "Documento no encontrado" });
+        }
+        res.json({ ok: true, data: doc.base64_data });
+    } catch (error) {
+        console.error("Get document data error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
+
+router.put("/documents/:id/status", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const { status, message } = req.body;
+        if (!["approved", "rejected", "pending"].includes(status)) {
+            return res.status(400).json({ ok: false, error: "Estado inválido" });
+        }
+
+        const docId = req.params.id;
+        const doc = await db.prepare("SELECT * FROM documents WHERE id = ?").get(docId);
+        if (!doc) return res.status(404).json({ ok: false, error: "Documento no encontrado" });
+
+        await db.prepare(`
+            UPDATE documents 
+            SET status = ?, review_message = ?, reviewer_id = ? 
+            WHERE id = ?
+        `).run(status, message || null, req.user.userId, docId);
+
+        // Enviar notificación al cliente
+        const typeStr = doc.type === 'id' ? 'Identificación' : (doc.type === 'proof_of_address' ? 'Comprobante de domicilio' : 'Documento');
+        let notifTitle = "";
+        let notifMessage = "";
+
+        if (status === "approved") {
+            notifTitle = "Documento Aprobado";
+            notifMessage = `Tu ${typeStr} ha sido aprobado exitosamente.`;
+        } else if (status === "rejected") {
+            notifTitle = "Documento requiere corrección";
+            notifMessage = `Tu ${typeStr} ha sido rechazado. Motivo: ${message || 'Por favor, envíalo nuevamente.'}`;
+        }
+
+        if (status !== "pending") {
+            await db.prepare(`
+                INSERT INTO notifications (user_id, type, title, message)
+                VALUES (?, 'info', ?, ?)
+            `).run(doc.user_id, notifTitle, notifMessage);
+        }
+
+        res.json({ ok: true, message: "Estado de documento actualizado" });
+    } catch (error) {
+        console.error("Update document status error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
+
 module.exports = router;
