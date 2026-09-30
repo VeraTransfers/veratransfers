@@ -1,4 +1,4 @@
-const CACHE_NAME = 'veratransfers-cache-v1';
+const CACHE_NAME = 'veratransfers-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
