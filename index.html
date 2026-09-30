@@ -2713,7 +2713,7 @@
                             <label>Mensaje</label>
                             <input type="text" id="notifMessage" placeholder="Ej. Tienes un préstamo pre-aprobado de $5,000" required>
                         </div>
-                        <button type="submit" class="request-btn" id="notifBtn" disabled>
+                        <button type="submit" class="request-btn" id="notifBtn">
                             Enviar notificación
                         </button>
                     </form>
@@ -5048,15 +5048,6 @@ function escapeHtml(value) {
     const adminNotificationForm = document.getElementById("adminNotificationForm");
     const notifMsg = document.getElementById("notifMsg");
     if (adminNotificationForm) {
-        // Habilitar botón si hay cliente seleccionado
-        setInterval(() => {
-            if (state.selectedClient) {
-                notifBtn.disabled = false;
-            } else {
-                notifBtn.disabled = true;
-            }
-        }, 1000);
-
         adminNotificationForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             if (!state.selectedClient) {
