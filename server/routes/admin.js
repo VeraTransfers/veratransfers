@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const db = require("../database");
 const { creditTestFunds, getAccount } = require("../financial");
+const { sendEmail } = require("../mailer");
 const router = express.Router();
 
 const JWT_SECRET =
@@ -223,6 +224,32 @@ router.post("/notifications", autenticarToken, exigirAdmin, async (req, res) => 
             VALUES (?, ?, ?, ?)
         `).run(userId, type || "info", title, message);
 
+        // Enviar correo si existe el usuario
+        const user = await db.prepare("SELECT email, name FROM users WHERE id = ?").get(userId);
+        if (user && user.email) {
+            await sendEmail(
+                user.email,
+                `Notificación de Avanza Financial: ${title}`,
+                `<div style="font-family: Arial, sans-serif; color: #17231d; max-width: 600px; margin: 0 auto; border: 1px solid #d5e0da; border-radius: 10px; overflow: hidden;">
+                    <div style="background-color: #087a4d; padding: 20px; text-align: center;">
+                        <h2 style="color: white; margin: 0; font-size: 24px;">Avanza Financial</h2>
+                    </div>
+                    <div style="padding: 30px; background-color: #f9fdfa;">
+                        <h3 style="color: #087a4d; margin-top: 0;">Hola ${user.name},</h3>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                            ${message}
+                        </p>
+                        <p style="font-size: 14px; color: #69756f; margin-top: 30px;">
+                            Para más detalles, inicie sesión en su cuenta de VeraTransfers.
+                        </p>
+                    </div>
+                    <div style="background-color: #17231d; padding: 15px; text-align: center; color: #d5e0da; font-size: 12px;">
+                        &copy; ${new Date().getFullYear()} Avanza Financial / VeraTransfers. Todos los derechos reservados.
+                    </div>
+                </div>`
+            );
+        }
+
         res.json({ ok: true, message: "Notificación enviada" });
     } catch (error) {
         console.error("Send notification error:", error);
@@ -297,6 +324,32 @@ router.put("/documents/:id/status", autenticarToken, exigirAdmin, async (req, re
                 INSERT INTO notifications (user_id, type, title, message)
                 VALUES (?, 'info', ?, ?)
             `).run(doc.user_id, notifTitle, notifMessage);
+
+            // Enviar correo si existe el usuario
+            const user = await db.prepare("SELECT email, name FROM users WHERE id = ?").get(doc.user_id);
+            if (user && user.email) {
+                await sendEmail(
+                    user.email,
+                    `Avanza Financial: ${notifTitle}`,
+                    `<div style="font-family: Arial, sans-serif; color: #17231d; max-width: 600px; margin: 0 auto; border: 1px solid #d5e0da; border-radius: 10px; overflow: hidden;">
+                        <div style="background-color: #087a4d; padding: 20px; text-align: center;">
+                            <h2 style="color: white; margin: 0; font-size: 24px;">Avanza Financial</h2>
+                        </div>
+                        <div style="padding: 30px; background-color: #f9fdfa;">
+                            <h3 style="color: #087a4d; margin-top: 0;">Hola ${user.name},</h3>
+                            <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                                ${notifMessage}
+                            </p>
+                            <p style="font-size: 14px; color: #69756f; margin-top: 30px;">
+                                Para más detalles, inicie sesión en su cuenta de VeraTransfers.
+                            </p>
+                        </div>
+                        <div style="background-color: #17231d; padding: 15px; text-align: center; color: #d5e0da; font-size: 12px;">
+                            &copy; ${new Date().getFullYear()} Avanza Financial / VeraTransfers. Todos los derechos reservados.
+                        </div>
+                    </div>`
+                );
+            }
         }
 
         res.json({ ok: true, message: "Estado de documento actualizado" });
