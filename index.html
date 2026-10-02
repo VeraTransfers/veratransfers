@@ -2288,6 +2288,23 @@
                                     >
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="profileDocument">Documento / ID</label>
+                                    <input
+                                        id="profileDocument"
+                                        type="text"
+                                        placeholder="Número de identificación"
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profileDob">Fecha de nacimiento</label>
+                                    <input
+                                        id="profileDob"
+                                        type="date"
+                                    >
+                                </div>
+
                             </div>
 
                             <div style="margin-top:20px;">
@@ -4637,6 +4654,8 @@ function escapeHtml(value) {
             setVal("profileCity",    u.city);
             setVal("profileState",   u.state_province);
             setVal("profileCountry", u.country);
+            setVal("profileDocument", u.document);
+            setVal("profileDob",     u.date_of_birth);
 
         } catch (err) {
             console.error("loadProfile error:", err);
@@ -4663,7 +4682,9 @@ function escapeHtml(value) {
                 address:        getVal("profileAddress"),
                 city:           getVal("profileCity"),
                 state_province: getVal("profileState"),
-                country:        getVal("profileCountry")
+                country:        getVal("profileCountry"),
+                document:       getVal("profileDocument"),
+                date_of_birth:  getVal("profileDob")
             };
             
             if (itiProfile) {

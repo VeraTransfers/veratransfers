@@ -198,7 +198,7 @@ router.patch("/me", autenticarToken, async (req, res) => {
     try {
         const allowedFields = [
             "name", "phone", "country_code", "dial_code", "phone_e164", "address",
-            "city", "state_province", "country"
+            "city", "state_province", "country", "document", "date_of_birth"
         ];
 
         const updates = {};
