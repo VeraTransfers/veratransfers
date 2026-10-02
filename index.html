@@ -2720,6 +2720,18 @@
                     <div id="notifMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
                 </div>
 
+                <!-- HISTORIAL DE NOTIFICACIONES -->
+                <div class="admin-section panel" id="adminNotifHistoryPanel" style="display: none;">
+                    <div class="panel-title">
+                        Historial de Notificaciones
+                    </div>
+                    <div style="color:#69756f;margin-bottom:18px;" id="adminNotifHistorySubtitle">
+                        Notificaciones enviadas a este cliente.
+                    </div>
+                    <div id="adminNotifHistoryList" style="max-height: 250px; overflow-y: auto; border: 1px solid #e0eae5; border-radius: 8px; background: #fff;">
+                        <div style="padding: 12px; text-align: center; color: #69756f; font-size: 13px;">Cargando...</div>
+                    </div>
+                </div>
 
                 <!-- ESTADO DE CUENTAS -->
 
@@ -3704,7 +3716,15 @@ function escapeHtml(value) {
                                 false;
 
                             renderClients();
-
+                            
+                            // Mostrar panel de historial y cargarlo
+                            const histPanel = document.getElementById("adminNotifHistoryPanel");
+                            if (histPanel) {
+                                histPanel.style.display = "block";
+                                if (window.fetchAdminClientNotifications) {
+                                    window.fetchAdminClientNotifications(client.id);
+                                }
+                            }
                         }
                     );
 
@@ -5079,6 +5099,9 @@ function escapeHtml(value) {
                     notifMsg.className = "profile-msg success";
                     adminNotificationForm.reset();
                     showToast("Notificación enviada", "success");
+                    if (window.fetchAdminClientNotifications && state.selectedClient) {
+                        window.fetchAdminClientNotifications(state.selectedClient.id);
+                    }
                 } else {
                     notifMsg.textContent = data.error || "Error al enviar notificación.";
                     notifMsg.className = "profile-msg error";
@@ -5089,6 +5112,37 @@ function escapeHtml(value) {
             }
         });
     }
+
+    window.fetchAdminClientNotifications = async function(userId) {
+        const listDiv = document.getElementById("adminNotifHistoryList");
+        if (!listDiv) return;
+        listDiv.innerHTML = '<div style="padding: 12px; text-align: center; color: #69756f; font-size: 13px;">Cargando historial...</div>';
+        try {
+            const token = localStorage.getItem("vera_token");
+            if (!token) return;
+            const res = await fetch("/api/admin/users/" + userId + "/notifications", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+            if (data.ok) {
+                if (data.notifications.length === 0) {
+                    listDiv.innerHTML = '<div style="padding: 12px; text-align: center; color: #69756f; font-size: 13px;">No hay notificaciones para este cliente.</div>';
+                } else {
+                    listDiv.innerHTML = data.notifications.map(n => `
+                        <div style="padding: 10px 12px; border-bottom: 1px solid #f0f8f4;">
+                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 4px; color: #087a4d;">${escapeHtml(n.title)}</div>
+                            <div style="font-size: 13px; color: #4a5e55; margin-bottom: 6px;">${escapeHtml(n.message)}</div>
+                            <div style="font-size: 11px; color: #8e9a94;">Enviado: ${new Date(n.created_at).toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                listDiv.innerHTML = '<div style="padding: 12px; text-align: center; color: #d64045; font-size: 13px;">Error al cargar historial.</div>';
+            }
+        } catch(e) {
+            listDiv.innerHTML = '<div style="padding: 12px; text-align: center; color: #d64045; font-size: 13px;">Error de conexión.</div>';
+        }
+    };
 
 })();
 </script>

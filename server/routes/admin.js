@@ -258,6 +258,31 @@ router.post("/notifications", autenticarToken, exigirAdmin, async (req, res) => 
 });
 
 /*
+ * OBTENER HISTORIAL DE NOTIFICACIONES DE UN CLIENTE
+ */
+
+router.get("/users/:userId/notifications", autenticarToken, exigirAdmin, async (req, res) => {
+    try {
+        const userId = Number(req.params.userId);
+        if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({ ok: false, error: "ID de usuario inválido" });
+        }
+        
+        const notifications = await db.prepare(`
+            SELECT id, type, title, message, read_at, created_at
+            FROM notifications
+            WHERE user_id = ?
+            ORDER BY created_at DESC
+        `).all(userId);
+
+        res.json({ ok: true, notifications });
+    } catch (error) {
+        console.error("Get admin user notifications error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+    }
+});
+
+/*
  * GESTIÓN DE DOCUMENTOS
  */
 
