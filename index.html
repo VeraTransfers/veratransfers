@@ -5533,7 +5533,8 @@ function escapeHtml(value) {
             });
             const data = await res.json();
             if (data.ok && data.data) {
-                adminDocImage.src = "data:image/jpeg;base64," + data.data;
+                // The data.data already contains the "data:image/..." prefix
+                adminDocImage.src = data.data;
             } else {
                 adminDocImage.alt = "Error al cargar la imagen";
             }
