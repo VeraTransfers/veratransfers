@@ -2333,29 +2333,30 @@
                         </div>
                         
                         <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                            <button type="button" id="startCameraBtn" style="flex:1; min-width:140px; padding:10px; border:1px solid #087a4d; background:#e9f5ee; border-radius:10px; cursor:pointer; color:#087a4d; font-weight:bold;">📷 Tomar foto ahora</button>
-                            <button type="button" id="selectFileBtn" style="flex:1; min-width:140px; padding:10px; border:1px solid #d5e0da; background:#fff; border-radius:10px; cursor:pointer; color:#4a5e55; font-weight:bold;">📁 Seleccionar archivo</button>
+                            <button type="button" id="startCameraBtn" style="flex:1; min-width:140px; padding:12px; border:1px solid #087a4d; background:#e9f5ee; border-radius:12px; cursor:pointer; color:#087a4d; font-weight:bold; box-shadow: 0 2px 6px rgba(8,122,77,0.15); transition: transform 0.1s;">📷 Usar Cámara de la App</button>
+                            <button type="button" id="selectFileBtn" style="flex:1; min-width:140px; padding:12px; border:1px solid #d5e0da; background:#fff; border-radius:12px; cursor:pointer; color:#4a5e55; font-weight:bold; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: transform 0.1s;">📁 Subir Archivo</button>
                             <input type="file" id="documentFile" accept="image/*" class="hidden">
                         </div>
 
                         <!-- Video Camera UI -->
-                        <div id="cameraContainer" class="hidden" style="margin-bottom: 15px; border: 1px solid #d5e0da; border-radius: 10px; padding: 10px; background: #fff; text-align:center;">
-                            <video id="cameraVideo" style="width: 100%; max-width: 400px; border-radius: 8px; display: none; margin: 0 auto;" autoplay playsinline></video>
-                            <canvas id="cameraCanvas" style="display: none; width: 100%; max-width: 400px; border-radius: 8px; margin: 0 auto;"></canvas>
-                            <div style="margin-top: 10px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                                <button type="button" id="captureBtn" style="padding: 10px 20px; border:none; background:#087a4d; color:white; border-radius:8px; cursor:pointer; display:none;">📸 Capturar</button>
-                                <button type="button" id="retakeBtn" style="padding: 10px 20px; border:1px solid #d5e0da; background:#fff; color:#4a5e55; border-radius:8px; cursor:pointer; display:none;">🔄 Repetir</button>
-                                <button type="button" id="switchCameraBtn" style="padding: 10px 20px; border:1px solid #d5e0da; background:#f4f7f5; color:#4a5e55; border-radius:8px; cursor:pointer; display:none;">🔄 Girar</button>
-                                <button type="button" id="cancelCameraBtn" style="padding: 10px 20px; border:none; background:#d9534f; color:white; border-radius:8px; cursor:pointer;">❌ Cancelar</button>
+                        <div id="cameraContainer" class="hidden" style="margin-bottom: 15px; border: 1px solid #d5e0da; border-radius: 12px; padding: 12px; background: #fafdfb; text-align:center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                            <div style="font-size: 13px; color: #69756f; margin-bottom: 10px; font-weight: 500;">Centra el documento en la pantalla</div>
+                            <video id="cameraVideo" style="width: 100%; max-width: 400px; border-radius: 10px; display: none; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" autoplay playsinline></video>
+                            <canvas id="cameraCanvas" style="display: none; width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></canvas>
+                            <div style="margin-top: 15px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                                <button type="button" id="captureBtn" style="padding: 12px 24px; border:none; background:#087a4d; color:white; border-radius:10px; cursor:pointer; display:none; font-weight:bold; box-shadow: 0 2px 6px rgba(8,122,77,0.2);">📸 Capturar</button>
+                                <button type="button" id="retakeBtn" style="padding: 12px 24px; border:1px solid #d5e0da; background:#fff; color:#4a5e55; border-radius:10px; cursor:pointer; display:none; font-weight:bold;">🔄 Repetir</button>
+                                <button type="button" id="switchCameraBtn" style="padding: 12px 20px; border:1px solid #d5e0da; background:#f4f7f5; color:#4a5e55; border-radius:10px; cursor:pointer; display:none; font-weight:bold;">🔄 Girar</button>
+                                <button type="button" id="cancelCameraBtn" style="padding: 12px 20px; border:none; background:#d9534f; color:white; border-radius:10px; cursor:pointer; font-weight:bold;">❌ Cancelar</button>
                             </div>
-                            <div id="cameraError" style="color: #d9534f; margin-top: 10px; font-size: 13px; display:none;">
-                                Permiso denegado. Por favor habilite el acceso a la cámara en los permisos de su navegador e intente nuevamente.
+                            <div id="cameraError" style="color: #d9534f; margin-top: 12px; font-size: 13px; display:none; padding: 10px; background: #fdf2f2; border-radius: 8px;">
+                                Permiso denegado. Por favor habilite el acceso a la cámara en los permisos de su navegador e intente nuevamente, o use el botón de "Subir Archivo".
                             </div>
                         </div>
 
                         <!-- Preview UI -->
-                        <div id="previewContainer" class="hidden" style="margin-bottom: 15px; text-align: center;">
-                            <img id="filePreview" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #d5e0da;" />
+                        <div id="previewContainer" class="hidden" style="margin-bottom: 15px; text-align: center; padding: 10px; background: #fafdfb; border-radius: 12px; border: 1px solid #e0eae5;">
+                            <img id="filePreview" style="max-width: 100%; max-height: 220px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
                         </div>
 
                         <button type="button" class="profile-save-btn hidden" id="uploadDocumentBtn" style="margin-top: 5px; width:100%;">Subir Documento</button>
