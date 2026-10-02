@@ -283,6 +283,52 @@ router.get("/users/:userId/notifications", autenticarToken, exigirAdmin, async (
 });
 
 /*
+ * PRÉSTAMOS
+ */
+
+// Crear nuevo préstamo para un usuario
+router.post('/users/:userId/loans', autenticarAdmin, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { amountCents, paymentCents, frequency } = req.body;
+        
+        if (!amountCents || !paymentCents || !frequency) {
+            return res.status(400).json({ ok: false, error: "Datos incompletos" });
+        }
+
+        const user = await db.prepare("SELECT id FROM users WHERE id = $1").get(userId);
+        if (!user) return res.status(404).json({ ok: false, error: "Usuario no encontrado" });
+
+        await db.prepare(`
+            INSERT INTO loans (user_id, amount_cents, payment_cents, frequency) 
+            VALUES ($1, $2, $3, $4)
+        `).run(userId, amountCents, paymentCents, frequency);
+
+        // Notificar al usuario
+        const title = 'Nuevo contrato de préstamo disponible';
+        const msg = 'Tu asesor ha generado una nueva propuesta de préstamo. Ve a la pestaña Crédito para revisarla y firmarla.';
+        await db.prepare('INSERT INTO notifications (user_id, type, title, message) VALUES ($1, $2, $3, $4)').run(userId, 'info', title, msg);
+
+        res.json({ ok: true, message: "Préstamo creado con éxito" });
+    } catch (err) {
+        console.error("Crear préstamo admin error:", err);
+        res.status(500).json({ ok: false, error: "Error interno" });
+    }
+});
+
+// Obtener préstamos de un usuario
+router.get('/users/:userId/loans', autenticarAdmin, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const loans = await db.prepare("SELECT * FROM loans WHERE user_id = $1 ORDER BY created_at DESC").all(userId);
+        res.json({ ok: true, loans });
+    } catch (err) {
+        console.error("Obtener préstamos admin error:", err);
+        res.status(500).json({ ok: false, error: "Error interno" });
+    }
+});
+
+/*
  * GESTIÓN DE DOCUMENTOS
  */
 

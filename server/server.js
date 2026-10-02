@@ -8,6 +8,7 @@ const authRouter = require("./routes/auth");
 const accountRouter = require("./routes/account");
 const adminRouter = require("./routes/admin");
 const cardRouter = require("./routes/card");
+const loansRouter = require("./routes/loans");
 
 const app = express();
 
@@ -56,6 +57,11 @@ USUARIOS
 app.use(
 "/api/users",
 usersRouter
+);
+
+app.use(
+"/api/loans",
+loansRouter
 );
 
 /* =========================================

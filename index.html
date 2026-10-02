@@ -2369,6 +2369,45 @@
                 <!-- TAB: CRÉDITO -->
                 <div id="tabCredito" class="tab-panel">
 
+                    <!-- CONTRATO DE PRÉSTAMO PENDIENTE -->
+                    <div id="loanContractSection" class="panel hidden" style="margin-bottom: 20px; border: 2px solid #087a4d;">
+                        <div class="panel-title" style="color: #087a4d; text-align: center;">Propuesta de Préstamo Aprobada</div>
+                        <div style="background: #fafdfb; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center;">
+                            <div style="font-size: 13px; color: #69756f; margin-bottom: 5px;">Monto del Crédito</div>
+                            <div id="loanAmountDisplay" style="font-size: 32px; font-weight: 800; color: #17231d;">$0.00</div>
+                            
+                            <div style="display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid #e0eae5; padding-top: 15px;">
+                                <div>
+                                    <div style="font-size: 12px; color: #69756f;">Cuota</div>
+                                    <div id="loanPaymentDisplay" style="font-weight: 700; font-size: 16px;">$0.00</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: #69756f;">Frecuencia</div>
+                                    <div id="loanFrequencyDisplay" style="font-weight: 700; font-size: 16px;">Mensual</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 12px; color: #69756f; margin-bottom: 15px; text-align: justify;">
+                            Al firmar este documento, aceptas los términos y condiciones de Avanza Financial. Te comprometes a realizar los pagos acordados en las fechas establecidas. En caso de incumplimiento, se aplicarán recargos. Este documento tiene validez legal una vez firmado digitalmente.
+                        </div>
+
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Firma Digital (Dibuja aquí):</div>
+                            <canvas id="signaturePad" width="300" height="150" style="border: 2px dashed #087a4d; border-radius: 8px; background: #fff; cursor: crosshair; touch-action: none; width: 100%; max-width: 400px;"></canvas>
+                            <div style="display: flex; justify-content: space-between; max-width: 400px; margin: 5px auto 0;">
+                                <button type="button" id="clearSignatureBtn" style="font-size: 12px; color: #d9534f; background: none; border: none; cursor: pointer; text-decoration: underline;">Borrar firma</button>
+                                <span style="font-size: 11px; color: #a0afa7;">Dibuja con el dedo</span>
+                            </div>
+                        </div>
+
+                        <button type="button" id="acceptLoanBtn" class="submit-btn" style="background:#087a4d; color:#fff; border-radius:10px; padding:14px; width:100%; font-weight:bold; cursor:pointer; border:none; font-size: 16px; box-shadow: 0 4px 12px rgba(8,122,77,0.2);">
+                            Aceptar y Firmar Préstamo
+                        </button>
+                        
+                        <div id="loanSignMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
+                    </div>
+
                     <div class="panel" style="margin-bottom: 20px;">
                         <div class="panel-title">Construye tu Crédito</div>
                         <p style="color:#69756f;font-size:14px;margin-top:0;">
@@ -2712,6 +2751,40 @@
                         class="admin-message"
                     ></div>
 
+                </div>
+
+                <!-- CONFIGURAR PRÉSTAMO -->
+                <div class="admin-section panel">
+                    <div class="panel-title">
+                        Configurar Préstamo / Contrato
+                    </div>
+                    <div style="color:#69756f;margin-bottom:18px;">
+                        Selecciona un cliente para generarle un contrato de crédito que deberá firmar.
+                    </div>
+                    
+                    <form id="adminLoanForm">
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Monto Total del Préstamo</label>
+                            <input type="number" id="loanAmount" placeholder="Ej. 8000" min="1" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label>Monto de la Cuota</label>
+                            <input type="number" id="loanPayment" placeholder="Ej. 150" min="1" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label>Frecuencia de Pago</label>
+                            <select id="loanFrequency" required style="width: 100%; padding: 12px; border: 1px solid #d5e0da; border-radius: 10px; background: #fff; font-size: 15px;">
+                                <option value="Semanal">Semanal</option>
+                                <option value="Quincenal">Quincenal</option>
+                                <option value="Mensual">Mensual</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn" style="background:#000; color:#fff; border-radius:10px; padding:12px; width:100%; font-weight:bold; cursor:pointer; border:none;">
+                            Generar Contrato
+                        </button>
+                    </form>
+
+                    <div id="adminLoanMessage" class="admin-message" style="margin-top: 10px;"></div>
                 </div>
 
                 <!-- ENVIAR NOTIFICACIÓN -->
@@ -5087,6 +5160,64 @@ function escapeHtml(value) {
     }, 2000);
 
 
+    const adminLoanForm = document.getElementById("adminLoanForm");
+    const adminLoanMessage = document.getElementById("adminLoanMessage");
+
+    if (adminLoanForm) {
+        adminLoanForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!state.selectedClient) {
+                adminLoanMessage.textContent = "Por favor selecciona un cliente de la tabla primero.";
+                adminLoanMessage.className = "admin-message show";
+                adminLoanMessage.style.backgroundColor = "#ffefef";
+                adminLoanMessage.style.color = "#c92a2a";
+                return;
+            }
+
+            adminLoanMessage.textContent = "Generando contrato...";
+            adminLoanMessage.className = "admin-message show";
+            adminLoanMessage.style.backgroundColor = "#f4f7f5";
+            adminLoanMessage.style.color = "#4a5e55";
+
+            try {
+                const token = localStorage.getItem("vera_token");
+                const res = await fetch(`/api/admin/users/${state.selectedClient.id}/loans`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({
+                        amountCents: Math.round(Number(document.getElementById("loanAmount").value) * 100),
+                        paymentCents: Math.round(Number(document.getElementById("loanPayment").value) * 100),
+                        frequency: document.getElementById("loanFrequency").value
+                    })
+                });
+                
+                const data = await res.json();
+                if (data.ok) {
+                    adminLoanMessage.textContent = "Contrato de préstamo generado y enviado al cliente con éxito.";
+                    adminLoanMessage.className = "admin-message show";
+                    adminLoanMessage.style.backgroundColor = "#ebf7f1";
+                    adminLoanMessage.style.color = "#087a4d";
+                    adminLoanForm.reset();
+                    showToast("Contrato generado", "success");
+                    // Refrescar notificaciones si existe para que aparezca la que enviamos
+                    if (window.fetchAdminClientNotifications) {
+                        window.fetchAdminClientNotifications(state.selectedClient.id);
+                    }
+                } else {
+                    adminLoanMessage.textContent = data.error || "Error al crear el préstamo.";
+                    adminLoanMessage.className = "admin-message show";
+                    adminLoanMessage.style.backgroundColor = "#ffefef";
+                    adminLoanMessage.style.color = "#c92a2a";
+                }
+            } catch(e) {
+                adminLoanMessage.textContent = "Error de conexión.";
+                adminLoanMessage.className = "admin-message show";
+                adminLoanMessage.style.backgroundColor = "#ffefef";
+                adminLoanMessage.style.color = "#c92a2a";
+            }
+        });
+    }
+
     const adminNotificationForm = document.getElementById("adminNotificationForm");
     const notifMsg = document.getElementById("notifMsg");
     if (adminNotificationForm) {
@@ -5681,6 +5812,156 @@ function escapeHtml(value) {
         }
     }, 2500);
 
+</script>
+<script>
+    // LÓGICA DE PRÉSTAMO Y FIRMA DIGITAL
+    const loanContractSection = document.getElementById("loanContractSection");
+    const loanAmountDisplay = document.getElementById("loanAmountDisplay");
+    const loanPaymentDisplay = document.getElementById("loanPaymentDisplay");
+    const loanFrequencyDisplay = document.getElementById("loanFrequencyDisplay");
+    const signaturePad = document.getElementById("signaturePad");
+    const clearSignatureBtn = document.getElementById("clearSignatureBtn");
+    const acceptLoanBtn = document.getElementById("acceptLoanBtn");
+    const loanSignMsg = document.getElementById("loanSignMsg");
+
+    let currentPendingLoanId = null;
+    let isDrawing = false;
+    let ctx = null;
+
+    if (signaturePad) {
+        ctx = signaturePad.getContext("2d");
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "#087a4d";
+
+        const getPos = (e) => {
+            const rect = signaturePad.getBoundingClientRect();
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+            }
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        };
+
+        const startDraw = (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        };
+
+        const draw = (e) => {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        };
+
+        const stopDraw = () => { isDrawing = false; };
+
+        signaturePad.addEventListener("mousedown", startDraw);
+        signaturePad.addEventListener("mousemove", draw);
+        signaturePad.addEventListener("mouseup", stopDraw);
+        signaturePad.addEventListener("mouseout", stopDraw);
+
+        signaturePad.addEventListener("touchstart", startDraw, { passive: false });
+        signaturePad.addEventListener("touchmove", draw, { passive: false });
+        signaturePad.addEventListener("touchend", stopDraw);
+    }
+
+    if (clearSignatureBtn) {
+        clearSignatureBtn.addEventListener("click", () => {
+            if (ctx) ctx.clearRect(0, 0, signaturePad.width, signaturePad.height);
+        });
+    }
+
+    async function loadPendingLoan() {
+        try {
+            const token = localStorage.getItem("vera_token");
+            if (!token) return;
+            const res = await fetch("/api/loans/my-loans", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            const data = await res.json();
+            if (data.ok && data.loans && data.loans.length > 0) {
+                const pending = data.loans.find(l => l.status === 'pending');
+                if (pending && loanContractSection) {
+                    currentPendingLoanId = pending.id;
+                    loanAmountDisplay.textContent = formatUSD(pending.amount_cents);
+                    loanPaymentDisplay.textContent = formatUSD(pending.payment_cents);
+                    loanFrequencyDisplay.textContent = pending.frequency;
+                    loanContractSection.classList.remove("hidden");
+                } else {
+                    loanContractSection.classList.add("hidden");
+                }
+            } else {
+                loanContractSection.classList.add("hidden");
+            }
+        } catch (e) {
+            console.error("Error cargando préstamo:", e);
+        }
+    }
+
+    if (acceptLoanBtn) {
+        acceptLoanBtn.addEventListener("click", async () => {
+            if (!currentPendingLoanId) return;
+
+            // Verificar si dibujó algo (si el canvas no está en blanco)
+            const blank = document.createElement('canvas');
+            blank.width = signaturePad.width;
+            blank.height = signaturePad.height;
+            if (signaturePad.toDataURL() === blank.toDataURL()) {
+                loanSignMsg.textContent = "Por favor dibuja tu firma antes de aceptar.";
+                loanSignMsg.className = "profile-msg error";
+                loanSignMsg.classList.remove("hidden");
+                return;
+            }
+
+            acceptLoanBtn.disabled = true;
+            acceptLoanBtn.textContent = "Procesando firma...";
+
+            try {
+                const token = localStorage.getItem("vera_token");
+                const res = await fetch(`/api/loans/${currentPendingLoanId}/sign`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                    body: JSON.stringify({ signatureData: signaturePad.toDataURL() })
+                });
+                const data = await res.json();
+                
+                if (data.ok) {
+                    loanSignMsg.textContent = "Préstamo firmado. Fondos autorizados.";
+                    loanSignMsg.className = "profile-msg success";
+                    loanSignMsg.classList.remove("hidden");
+                    setTimeout(() => {
+                        loanContractSection.classList.add("hidden");
+                    }, 3000);
+                } else {
+                    loanSignMsg.textContent = data.error || "Error al firmar.";
+                    loanSignMsg.className = "profile-msg error";
+                    loanSignMsg.classList.remove("hidden");
+                }
+            } catch (e) {
+                loanSignMsg.textContent = "Error de conexión.";
+                loanSignMsg.className = "profile-msg error";
+                loanSignMsg.classList.remove("hidden");
+            } finally {
+                acceptLoanBtn.disabled = false;
+                acceptLoanBtn.textContent = "Aceptar y Firmar Préstamo";
+            }
+        });
+    }
+
+    // Hook tab click
+    document.addEventListener("DOMContentLoaded", () => {
+        const tabBtnCredito = document.getElementById("tabBtnCredito");
+        if (tabBtnCredito) {
+            tabBtnCredito.addEventListener("click", () => {
+                loadPendingLoan();
+            });
+        }
+    });
 </script>
 </body>
 </html>
