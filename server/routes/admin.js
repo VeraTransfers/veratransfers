@@ -317,7 +317,7 @@ router.post('/users/:userId/loans', autenticarToken, exigirAdmin, async (req, re
 });
 
 // Obtener préstamos de un usuario
-router.get('/users/:userId/loans', autenticarAdmin, async (req, res) => {
+router.get('/users/:userId/loans', autenticarToken, exigirAdmin, async (req, res) => {
     try {
         const { userId } = req.params;
         const loans = await db.prepare("SELECT * FROM loans WHERE user_id = $1 ORDER BY created_at DESC").all(userId);
