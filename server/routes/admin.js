@@ -287,7 +287,7 @@ router.get("/users/:userId/notifications", autenticarToken, exigirAdmin, async (
  */
 
 // Crear nuevo préstamo para un usuario
-router.post('/users/:userId/loans', autenticarAdmin, async (req, res) => {
+router.post('/users/:userId/loans', autenticarToken, exigirAdmin, async (req, res) => {
     try {
         const { userId } = req.params;
         const { amountCents, paymentCents, frequency } = req.body;
