@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VeraTransfers</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23087a4d'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='55' font-weight='bold' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23511C87'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='55' font-weight='bold' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
     
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
@@ -21,9 +24,9 @@
 
         body {
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7f5;
-            color: #17231d;
+            font-family: "Inter", "Roboto", "Helvetica Neue", Arial, sans-serif;
+            background: #F7F8FA;
+            color: #1D1A21;
         }
 
         button,
@@ -42,7 +45,7 @@
         .auth-split {
             min-height: 100vh;
             display: flex;
-            background: #f4f7f5;
+            background: #F7F8FA;
         }
 
         .auth-visual {
@@ -50,7 +53,7 @@
             position: relative;
             display: none;
             overflow: hidden;
-            background: #111d18;
+            background: #160924;
         }
 
         .auth-bg-img {
@@ -112,7 +115,7 @@
             justify-content: center;
             width: 24px;
             height: 24px;
-            background: #00A859;
+            background: #661BB5;
             border-radius: 50%;
             font-size: 14px;
             flex-shrink: 0;
@@ -156,7 +159,7 @@
             }
             
             .auth-split {
-                background: linear-gradient(rgba(8, 122, 77, 0.85), rgba(17, 29, 24, 0.95)), url('/login_bg.jpg') no-repeat center center;
+                background: linear-gradient(rgba(81, 28, 135, 0.85), rgba(30, 20, 40, 0.95)), url('/login_bg.jpg') no-repeat center center;
                 background-size: cover;
                 align-items: center;
             }
@@ -214,7 +217,7 @@
         .brand {
             font-size: 30px;
             font-weight: 800;
-            color: #087a4d;
+            color: #511C87;
             margin-bottom: 8px;
         }
 
@@ -224,7 +227,7 @@
         }
 
         .login-subtitle {
-            color: #66736c;
+            color: #6B6870;
             margin-bottom: 28px;
         }
 
@@ -237,7 +240,7 @@
 
         input {
             width: 100%;
-            border: 1px solid #d8e1dc;
+            border: 1px solid #E0E0E5;
             border-radius: 12px;
             padding: 14px;
             outline: none;
@@ -264,7 +267,7 @@
             border: none;
             cursor: pointer;
             font-size: 18px;
-            color: #66736c;
+            color: #6B6870;
             padding: 0;
             display: flex;
             align-items: center;
@@ -273,7 +276,7 @@
         }
 
         input:focus {
-            border-color: #07905b;
+            border-color: #6523A8;
         }
 
         .primary-btn {
@@ -281,22 +284,22 @@
             border: 0;
             border-radius: 12px;
             padding: 14px 18px;
-            background: #087a4d;
+            background: #511C87;
             color: white;
             font-weight: 800;
             cursor: pointer;
         }
 
         .primary-btn:hover {
-            background: #06663f;
+            background: #3D1565;
         }
 
         .message {
             margin-top: 16px;
             padding: 12px;
             border-radius: 10px;
-            background: #fff4d8;
-            color: #6b5011;
+            background: #F5F2FF;
+            color: #311059;
             font-size: 14px;
         }
 
@@ -334,7 +337,7 @@
         header {
             height: 72px;
             background: white;
-            border-bottom: 1px solid #e2e9e5;
+            border-bottom: 1px solid #E4E4EB;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -347,7 +350,7 @@
         .header-brand {
             font-size: 25px;
             font-weight: 900;
-            color: #087a4d;
+            color: #511C87;
         }
 
         .header-user {
@@ -361,7 +364,7 @@
         }
 
         .logout-btn {
-            border: 1px solid #d8e1dc;
+            border: 1px solid #E0E0E5;
             background: white;
             border-radius: 10px;
             padding: 9px 14px;
@@ -411,7 +414,7 @@
 
         .panel {
             background: white;
-            border: 1px solid #e4ebe7;
+            border: 1px solid #E6E6ED;
             border-radius: 20px;
             padding: 22px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, .04);
@@ -424,7 +427,7 @@
         }
 
         .stat-label {
-            color: #718078;
+            color: #7A7682;
             font-size: 13px;
             margin-bottom: 7px;
         }
@@ -435,7 +438,7 @@
         }
 
         .balance-panel {
-            background: linear-gradient(135deg, #087a4d, #0b9a63);
+            background: linear-gradient(135deg, #511C87, #7E2BE6);
             color: white;
             border: 0;
         }
@@ -464,7 +467,7 @@
             justify-content: space-between;
             gap: 20px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #edf1ef;
+            border-bottom: 1px solid #F0F0F5;
         }
 
         .info-row:last-child {
@@ -473,7 +476,7 @@
         }
 
         .info-label {
-            color: #738078;
+            color: #7A7682;
         }
 
         .info-value {
@@ -500,8 +503,8 @@
             overflow: hidden;
             background:
                 radial-gradient(circle at 90% 10%, rgba(255,255,255,.20), transparent 30%),
-                linear-gradient(135deg, #111d18, #087a4d 65%, #0ca76b);
-            box-shadow: 0 18px 40px rgba(0, 70, 45, .25);
+                linear-gradient(135deg, #160924, #511C87 65%, #7E34CC);
+            box-shadow: 0 18px 40px rgba(81, 28, 135, .35);
         }
 
         .virtual-card::after {
@@ -599,7 +602,7 @@
 
         .request-card {
             background: white;
-            border: 1px solid #e2e9e5;
+            border: 1px solid #E4E4EB;
             border-radius: 20px;
             padding: 26px;
             max-width: 600px;
@@ -611,13 +614,13 @@
         }
 
         .request-card p {
-            color: #68756e;
+            color: #6F6B75;
             line-height: 1.6;
         }
 
         .request-btn {
             border: 0;
-            background: #087a4d;
+            background: #511C87;
             color: white;
             padding: 13px 20px;
             border-radius: 11px;
@@ -626,7 +629,7 @@
         }
 
         .request-btn:hover {
-            background: #06663f;
+            background: #3D1565;
         }
 
         .requested-status {
@@ -635,8 +638,8 @@
             gap: 8px;
             padding: 9px 12px;
             border-radius: 10px;
-            background: #e8f7ef;
-            color: #087a4d;
+            background: #EFE8F7;
+            color: #511C87;
             font-size: 13px;
             font-weight: 800;
         }
@@ -657,13 +660,13 @@
         .clients-table th,
         .clients-table td {
             padding: 13px 10px;
-            border-bottom: 1px solid #edf1ef;
+            border-bottom: 1px solid #F0F0F5;
             text-align: left;
             font-size: 14px;
         }
 
         .clients-table th {
-            color: #6e7b74;
+            color: #75717A;
             font-size: 12px;
             text-transform: uppercase;
         }
@@ -673,11 +676,11 @@
         }
 
         .client-row:hover {
-            background: #f7faf8;
+            background: #F9F8FA;
         }
 
         .selected-row {
-            background: #eef8f3;
+            background: #F0E8F7;
         }
 
         .credit-box {
@@ -704,8 +707,8 @@
         }
 
         .quick-btn:hover {
-            border-color: #087a4d;
-            color: #087a4d;
+            border-color: #511C87;
+            color: #511C87;
         }
 
         .admin-message {
@@ -770,7 +773,7 @@
 .tabs-nav {
     display: flex;
     gap: 4px;
-    background: #f0f4f2;
+    background: #F2F0F5;
     border-radius: 14px;
     padding: 4px;
     margin-bottom: 28px;
@@ -785,18 +788,18 @@
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
-    color: #5a6b63;
+    color: #635D6B;
     transition: all .2s;
 }
 
 .tab-btn:hover {
     background: rgba(255,255,255,.7);
-    color: #087a4d;
+    color: #511C87;
 }
 
 .tab-btn.active {
     background: white;
-    color: #087a4d;
+    color: #511C87;
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
@@ -842,7 +845,7 @@
 .form-group input,
 .form-group select {
     width: 100%;
-    border: 1px solid #d8e1dc;
+    border: 1px solid #E0E0E5;
     border-radius: 10px;
     padding: 11px 13px;
     outline: none;
@@ -853,7 +856,7 @@
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #07905b;
+    border-color: #6523A8;
 }
 
 .form-group.full-width {
@@ -862,7 +865,7 @@
 
 .profile-save-btn {
     border: 0;
-    background: #087a4d;
+    background: #511C87;
     color: white;
     padding: 12px 24px;
     border-radius: 10px;
@@ -873,7 +876,7 @@
 }
 
 .profile-save-btn:hover {
-    background: #06663f;
+    background: #3D1565;
 }
 
 .profile-msg {
@@ -886,7 +889,7 @@
 
 .profile-msg.success {
     background: #e8f5ee;
-    color: #087a4d;
+    color: #511C87;
 }
 
 .profile-msg.error {
@@ -948,7 +951,7 @@
 .btn-primary {
     flex: 1;
     border: 0;
-    background: #087a4d;
+    background: #511C87;
     color: white;
     border-radius: 10px;
     padding: 11px;
@@ -958,7 +961,7 @@
 }
 
 .btn-primary:hover {
-    background: #06663f;
+    background: #3D1565;
 }
 
 /* =========================
@@ -974,7 +977,7 @@
     padding: 24px;
     background:
         radial-gradient(circle at top right, rgba(19, 141, 91, .14), transparent 35%),
-        #f4f7f5;
+        #F7F8FA;
 }
 
 .sandbox-badge {
@@ -995,7 +998,7 @@
 }
 
 .token-display {
-    background: #f0f4f2;
+    background: #F2F0F5;
     border-radius: 8px;
     padding: 12px;
     font-family: monospace;
@@ -1025,7 +1028,7 @@
 
 .transfer-result.success {
     background: #e8f5ee;
-    color: #087a4d;
+    color: #511C87;
 }
 
 .transfer-result.error {
@@ -1408,7 +1411,7 @@
                 </button>
             </div>
             
-            <div style="margin-top:24px;text-align:center;font-size:12px;color:#718078;display:flex;align-items:center;justify-content:center;gap:6px;">
+            <div style="margin-top:24px;text-align:center;font-size:12px;color:#7A7682;display:flex;align-items:center;justify-content:center;gap:6px;">
                 <span>🔒</span> Cifrado de extremo a extremo SSL
             </div>
 
@@ -1529,7 +1532,7 @@
                 </div>
 
                 <label for="registerCurrency">
-                    Moneda Principal
+                    Currency Principal
                 </label>
                 <select id="registerCurrency" required>
                     <option value="USD" selected>Dólares (USD)</option>
@@ -1555,13 +1558,13 @@
                 <button
                     type="button"
                     id="backToLoginBtn"
-                    style="background:none;border:0;color:#087a4d;cursor:pointer;font-weight:700;font-size:14px;"
+                    style="background:none;border:0;color:#511C87;cursor:pointer;font-weight:700;font-size:14px;"
                 >
                     Ya tengo una cuenta · Iniciar sesión
                 </button>
             </div>
             
-            <div style="margin-top:24px;text-align:center;font-size:12px;color:#718078;display:flex;align-items:center;justify-content:center;gap:6px;">
+            <div style="margin-top:24px;text-align:center;font-size:12px;color:#7A7682;display:flex;align-items:center;justify-content:center;gap:6px;">
                 <span>🔒</span> Cifrado de extremo a extremo SSL
             </div>
 
@@ -1605,7 +1608,7 @@
 
             <!-- Token visible después de solicitar -->
             <div id="forgotTokenPanel" class="hidden" style="margin-top:18px;">
-                <div style="background:#e8f7ef; border:1px solid #c2e8d3; border-radius:10px; padding:12px 14px; font-size:12px; color:#0f5132; margin:14px 0;">
+                <div style="background:#EFE8F7; border:1px solid #c2e8d3; border-radius:10px; padding:12px 14px; font-size:12px; color:#0f5132; margin:14px 0;">
                     <strong>🔑 CÓDIGO DE RECUPERACIÓN ENVIADO</strong>
                     Por favor, copia el código de seguridad que hemos generado para ti y úsalo en el siguiente paso.
                     <div id="forgotTokenDisplay" class="token-display"></div>
@@ -1764,6 +1767,36 @@
     </div>
 
 
+    
+    <!-- QR MODAL -->
+    <div id="qrModal" class="modal-overlay hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; justify-content:center; align-items:center;">
+        <div style="background:#fff; border-radius:24px; width:90%; max-width:400px; padding:30px; text-align:center; position:relative;">
+            <button type="button" onclick="document.getElementById('qrModal').classList.add('hidden')" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color:#1D1A21;">&times;</button>
+            <h2 style="margin-top:0; color:#511C87;">My QR Code</h2>
+            <p style="color:#69756f; font-size:14px; margin-bottom:24px;">Show this code to receive money instantly.</p>
+            <div style="background:#F7F8FA; padding:20px; border-radius:16px; display:inline-block; margin-bottom:20px;">
+                <!-- Simulated QR Code SVG -->
+                <svg width="200" height="200" viewBox="0 0 100 100">
+                    <rect width="100" height="100" fill="white"/>
+                    <!-- QR patterns -->
+                    <rect x="10" y="10" width="20" height="20" fill="#511C87"/>
+                    <rect x="15" y="15" width="10" height="10" fill="white"/>
+                    <rect x="70" y="10" width="20" height="20" fill="#511C87"/>
+                    <rect x="75" y="15" width="10" height="10" fill="white"/>
+                    <rect x="10" y="70" width="20" height="20" fill="#511C87"/>
+                    <rect x="15" y="75" width="10" height="10" fill="white"/>
+                    <path d="M40 10h20v10H40zm0 20h10v20H40zm20 10h20v10H60zm-20 20h20v20H40zm-10 10h10v10H30z" fill="#511C87"/>
+                    <rect x="70" y="50" width="10" height="10" fill="#511C87"/>
+                    <rect x="80" y="70" width="10" height="10" fill="#511C87"/>
+                    <rect x="50" y="70" width="10" height="10" fill="#511C87"/>
+                    <circle cx="50" cy="50" r="10" fill="#511C87"/>
+                </svg>
+            </div>
+            <div style="font-weight:bold; font-size:18px;" id="qrAccountHolder">Account Name</div>
+            <div style="color:#69756f; font-size:14px; margin-top:5px;" id="qrAccountId">VT-000000</div>
+        </div>
+    </div>
+
     <!-- Toast notifications -->
     <div id="veraToast" class="vera-toast"></div>
 
@@ -1790,8 +1823,8 @@
                     <span style="font-size: 20px;">🔔</span>
                     <span id="notifBadge" style="position: absolute; top: -5px; right: -8px; background: #b91c1c; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; display: none;">0</span>
                     
-                    <div id="notifDropdown" class="hidden" style="position: absolute; top: 35px; right: 0; width: 300px; background: white; border: 1px solid #e2e9e5; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100;">
-                        <div style="padding: 12px; border-bottom: 1px solid #e2e9e5; font-weight: bold; color: #17231d;">Notificaciones</div>
+                    <div id="notifDropdown" class="hidden" style="position: absolute; top: 35px; right: 0; width: 300px; background: white; border: 1px solid #E4E4EB; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100;">
+                        <div style="padding: 12px; border-bottom: 1px solid #E4E4EB; font-weight: bold; color: #1D1A21;">Notificaciones</div>
                         <div id="notifList" style="max-height: 300px; overflow-y: auto; padding: 0;">
                             <div style="padding: 12px; text-align: center; color: #69756f; font-size: 13px;">No tienes notificaciones.</div>
                         </div>
@@ -1835,7 +1868,7 @@
                     </h1>
 
                     <p>
-                        Este es el estado de tu cuenta VeraTransfers.
+                        Here is the current status of your VeraTransfers account.
                     </p>
 
                 </div>
@@ -1850,10 +1883,11 @@
 
                 <!-- NAVEGACIÓN POR PESTAÑAS -->
                 <nav class="tabs-nav" role="tablist">
-                    <button class="tab-btn active" id="tabBtnCuenta"    data-tab="tabCuenta"    type="button" role="tab">📊 Cuenta</button>
-                    <button class="tab-btn"        id="tabBtnTransferir" data-tab="tabTransferir" type="button" role="tab">💸 Transferir</button>
-                    <button class="tab-btn"        id="tabBtnCredito"   data-tab="tabCredito"   type="button" role="tab">📈 Crédito</button>
-                    <button class="tab-btn"        id="tabBtnPerfil"    data-tab="tabPerfil"    type="button" role="tab">👤 Perfil</button>
+                    <button class="tab-btn active" id="tabBtnCuenta"    data-tab="tabCuenta"    type="button" role="tab">📊 Account</button>
+                    <button class="tab-btn"        id="tabBtnTransferir" data-tab="tabTransferir" type="button" role="tab">💸 Transfer</button>
+                    <button class="tab-btn"        id="tabBtnCredito"   data-tab="tabCredito"   type="button" role="tab">📈 Credit</button>
+                    <button class="tab-btn"        id="tabBtnInversiones" data-tab="tabInversiones" type="button" role="tab">💼 Investments</button>
+                    <button class="tab-btn"        id="tabBtnPerfil"    data-tab="tabPerfil"    type="button" role="tab">👤 Profile</button>
                 </nav>
 
                 <!-- TAB: CUENTA -->
@@ -1864,7 +1898,7 @@
                     <div class="panel balance-panel">
 
                         <div class="stat-label">
-                            Saldo disponible
+                            Available Balance
                         </div>
 
                         <div
@@ -1886,7 +1920,7 @@
                     <div class="panel">
 
                         <div class="panel-title">
-                            Información de cuenta
+                            Account Information
                         </div>
 
                         <div class="account-info">
@@ -1894,7 +1928,7 @@
                             <div class="info-row">
 
                                 <span class="info-label">
-                                    Titular
+                                    Account Holder
                                 </span>
 
                                 <span
@@ -1937,14 +1971,14 @@
                             <div class="info-row">
 
                                 <span class="info-label">
-                                    Estado
+                                    Status
                                 </span>
 
                                 <span
                                     class="info-value"
-                                    style="color:#087a4d;"
+                                    style="color:#511C87;"
                                 >
-                                    Activa
+                                    Active
                                 </span>
 
                             </div>
@@ -1962,7 +1996,7 @@
 
                 <div class="panel" style="margin-top:24px;">
                     <div class="panel-title">
-                        Movimientos recientes
+                        Recent Activity
                     </div>
 
                     <div
@@ -1972,7 +2006,7 @@
                         <div
                             style="padding:16px 0;opacity:.65;font-size:14px;"
                         >
-                            Cargando movimientos...
+                            Loading activity...
                         </div>
                     </div>
                 </div>
@@ -1986,7 +2020,7 @@
                     <div class="panel">
 
                         <div class="panel-title">
-                            Mi tarjeta
+                            My Card
                         </div>
 
                         <!-- SOLICITAR -->
@@ -2110,43 +2144,54 @@
 
                     <div class="panel">
 
-                        <div class="panel-title">Transferencia interna</div>
+                        <div class="panel-title" style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>Send & Request Money</span>
+                            <button type="button" style="background:none; border:none; font-size:24px; cursor:pointer;" onclick="document.getElementById('qrModal').classList.remove('hidden')">📱</button>
+                        </div>
 
                         <p style="color:#69756f;font-size:14px;margin-top:0;">
-                            Transfiere fondos a otro usuario dentro del sistema VeraTransfers.
-                            Usa el número de cuenta del destinatario (formato <strong>VT-000000</strong>).
+                            Fast, safe and easy way to send and request money.
                         </p>
+
+                        <div style="display:flex; gap:12px; margin-bottom: 24px;">
+                            <button type="button" id="zelleSendBtn" style="flex:1; background:#511C87; color:white; border:none; padding:14px; border-radius:12px; font-weight:bold; font-size:16px; cursor:pointer; box-shadow: 0 4px 12px rgba(81, 28, 135, 0.2);">Send</button>
+                            <button type="button" id="zelleRequestBtn" style="flex:1; background:#fff; color:#511C87; border:2px solid #511C87; padding:14px; border-radius:12px; font-weight:bold; font-size:16px; cursor:pointer;">Request</button>
+                        </div>
 
                         <form id="transferForm" class="transfer-form">
 
                             <div class="form-group">
-                                <label for="transferDestination">Cuenta destino</label>
+                                <label for="transferDestination">Recipient (Email, Phone or Account ID)</label>
                                 <input
                                     id="transferDestination"
                                     type="text"
-                                    placeholder="VT-000001"
+                                    placeholder="Name, @cashtag, or VT-000001"
                                     required
                                 >
                             </div>
 
                             <div class="form-group">
-                                <label for="transferAmount">Monto</label>
-                                <input
-                                    id="transferAmount"
-                                    type="number"
-                                    min="0.01"
-                                    step="0.01"
-                                    placeholder="Ej. 100.00"
-                                    required
-                                >
+                                <label for="transferAmount">Amount</label>
+                                <div style="position:relative;">
+                                    <span style="position:absolute; left:14px; top:14px; font-weight:bold; color:#1D1A21;">$</span>
+                                    <input
+                                        id="transferAmount"
+                                        type="number"
+                                        min="0.01"
+                                        step="0.01"
+                                        placeholder="0.00"
+                                        style="padding-left:30px; font-size: 18px; font-weight:bold;"
+                                        required
+                                    >
+                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="transferDescription">Descripción (opcional)</label>
+                                <label for="transferDescription">What's this for?</label>
                                 <input
                                     id="transferDescription"
                                     type="text"
-                                    placeholder="Motivo de la transferencia"
+                                    placeholder="Add a note"
                                 >
                             </div>
 
@@ -2155,27 +2200,27 @@
                                     type="submit"
                                     class="profile-save-btn"
                                     id="transferBtn"
+                                    style="background:#511C87;"
                                 >
-                                    Enviar transferencia
+                                    Review & Send
                                 </button>
                             </div>
 
                         </form>
 
                         <div id="transferResult" class="transfer-result hidden"></div>
-
                     </div>
 
                     <!-- CAJERO AUTOMATICO (ATM) -->
                     <div class="panel" style="margin-top: 20px;">
-                        <div class="panel-title">Retiro en Cajero (ATM)</div>
+                        <div class="panel-title">Cardless ATM Withdrawal</div>
                         <p style="color:#69756f;font-size:14px;margin-top:0;">
-                            Retira dinero en efectivo desde cualquier cajero afiliado usando un código de seguridad de 6 dígitos. Sin usar tarjeta.
+                            Withdraw cash at any partner ATM using a secure 6-digit code. No card needed.
                         </p>
                         
                         <form id="atmWithdrawForm" class="transfer-form">
                             <div class="form-group">
-                                <label for="atmAmount">Monto a retirar</label>
+                                <label for="atmAmount">Withdrawal Amount</label>
                                 <input
                                     id="atmAmount"
                                     type="number"
@@ -2187,22 +2232,40 @@
                             </div>
                             
                             <div>
-                                <button type="submit" class="profile-save-btn" id="atmBtn" style="background:#17231d;">
-                                    Generar código de retiro
+                                <button type="submit" class="profile-save-btn" id="atmBtn" style="background:#1D1A21;">
+                                    Generate Withdrawal Code
                                 </button>
                             </div>
                         </form>
                         
-                        <div id="atmResult" class="hidden" style="margin-top: 15px; background: #e9f5ee; border: 1px dashed #087a4d; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 13px; color: #087a4d; font-weight: bold; margin-bottom: 5px;">Tu código de retiro es:</div>
-                            <div id="atmCode" style="font-size: 28px; letter-spacing: 4px; color: #17231d; font-weight: bold; margin-bottom: 10px;">000000</div>
-                            <div style="font-size: 12px; color: #69756f;">Válido por 30 minutos. Ingrésalo en la pantalla del cajero automático.</div>
+                        <div id="atmResult" class="hidden" style="margin-top: 15px; background: #e9f5ee; border: 1px dashed #511C87; padding: 15px; border-radius: 10px; text-align: center;">
+                            <div style="font-size: 13px; color: #511C87; font-weight: bold; margin-bottom: 5px;">Your withdrawal code is:</div>
+                            <div id="atmCode" style="font-size: 28px; letter-spacing: 4px; color: #1D1A21; font-weight: bold; margin-bottom: 10px;">000000</div>
+                            <div style="font-size: 12px; color: #69756f;">Valid for 30 minutes. Enter it on the ATM screen.</div>
                         </div>
                         <div id="atmError" class="transfer-result error hidden" style="margin-top: 15px;"></div>
                     </div>
 
                 </div><!-- /tabTransferir -->
 
+
+                
+                <!-- TAB: INVESTMENTS -->
+                <div id="tabInversiones" class="tab-panel hidden">
+                    <div class="panel balance-panel" style="background: linear-gradient(135deg, #3D1565, #511C87);">
+                        <div class="stat-label">Total Invested Capital</div>
+                        <div class="stat-value">$0.00</div>
+                        <div style="margin-top:8px;font-size:13px;opacity:.8;">USD</div>
+                    </div>
+                    
+                    <div class="panel" style="margin-top:24px;">
+                        <div class="panel-title">Investment Plans</div>
+                        <div style="color:#7A7682; font-size: 14px; margin-bottom: 16px;">
+                            Grow your capital with our secure investment plans. Interest is paid daily.
+                        </div>
+                        <button class="primary-btn" onclick="alert('This feature will be available soon.')">Explore Plans</button>
+                    </div>
+                </div>
 
                 <!-- TAB: PERFIL -->
                 <div id="tabPerfil" class="tab-panel">
@@ -2333,7 +2396,7 @@
                         </div>
                         
                         <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                            <button type="button" id="startCameraBtn" style="flex:1; min-width:140px; padding:12px; border:1px solid #087a4d; background:#e9f5ee; border-radius:12px; cursor:pointer; color:#087a4d; font-weight:bold; box-shadow: 0 2px 6px rgba(8,122,77,0.15); transition: transform 0.1s;">📷 Usar Cámara de la App</button>
+                            <button type="button" id="startCameraBtn" style="flex:1; min-width:140px; padding:12px; border:1px solid #511C87; background:#e9f5ee; border-radius:12px; cursor:pointer; color:#511C87; font-weight:bold; box-shadow: 0 2px 6px rgba(8,122,77,0.15); transition: transform 0.1s;">📷 Usar Cámara de la App</button>
                             <button type="button" id="selectFileBtn" style="flex:1; min-width:140px; padding:12px; border:1px solid #d5e0da; background:#fff; border-radius:12px; cursor:pointer; color:#4a5e55; font-weight:bold; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: transform 0.1s;">📁 Subir Archivo</button>
                             <input type="file" id="documentFile" accept="image/*" class="hidden">
                         </div>
@@ -2344,9 +2407,9 @@
                             <video id="cameraVideo" style="width: 100%; max-width: 400px; border-radius: 10px; display: none; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" autoplay playsinline></video>
                             <canvas id="cameraCanvas" style="display: none; width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></canvas>
                             <div style="margin-top: 15px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                                <button type="button" id="captureBtn" style="padding: 12px 24px; border:none; background:#087a4d; color:white; border-radius:10px; cursor:pointer; display:none; font-weight:bold; box-shadow: 0 2px 6px rgba(8,122,77,0.2);">📸 Capturar</button>
+                                <button type="button" id="captureBtn" style="padding: 12px 24px; border:none; background:#511C87; color:white; border-radius:10px; cursor:pointer; display:none; font-weight:bold; box-shadow: 0 2px 6px rgba(8,122,77,0.2);">📸 Capturar</button>
                                 <button type="button" id="retakeBtn" style="padding: 12px 24px; border:1px solid #d5e0da; background:#fff; color:#4a5e55; border-radius:10px; cursor:pointer; display:none; font-weight:bold;">🔄 Repetir</button>
-                                <button type="button" id="switchCameraBtn" style="padding: 12px 20px; border:1px solid #d5e0da; background:#f4f7f5; color:#4a5e55; border-radius:10px; cursor:pointer; display:none; font-weight:bold;">🔄 Girar</button>
+                                <button type="button" id="switchCameraBtn" style="padding: 12px 20px; border:1px solid #d5e0da; background:#F7F8FA; color:#4a5e55; border-radius:10px; cursor:pointer; display:none; font-weight:bold;">🔄 Girar</button>
                                 <button type="button" id="cancelCameraBtn" style="padding: 12px 20px; border:none; background:#d9534f; color:white; border-radius:10px; cursor:pointer; font-weight:bold;">❌ Cancelar</button>
                             </div>
                             <div id="cameraError" style="color: #d9534f; margin-top: 12px; font-size: 13px; display:none; padding: 10px; background: #fdf2f2; border-radius: 8px;">
@@ -2370,11 +2433,11 @@
                 <div id="tabCredito" class="tab-panel">
 
                     <!-- CONTRATO DE PRÉSTAMO PENDIENTE -->
-                    <div id="loanContractSection" class="panel hidden" style="margin-bottom: 20px; border: 2px solid #087a4d;">
-                        <div class="panel-title" style="color: #087a4d; text-align: center;">Propuesta de Préstamo Aprobada</div>
+                    <div id="loanContractSection" class="panel hidden" style="margin-bottom: 20px; border: 2px solid #511C87;">
+                        <div class="panel-title" style="color: #511C87; text-align: center;">Propuesta de Préstamo Aprobada</div>
                         <div style="background: #fafdfb; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center;">
                             <div style="font-size: 13px; color: #69756f; margin-bottom: 5px;">Monto del Crédito</div>
-                            <div id="loanAmountDisplay" style="font-size: 32px; font-weight: 800; color: #17231d;">$0.00</div>
+                            <div id="loanAmountDisplay" style="font-size: 32px; font-weight: 800; color: #1D1A21;">$0.00</div>
                             
                             <div style="display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid #e0eae5; padding-top: 15px;">
                                 <div>
@@ -2394,14 +2457,14 @@
 
                         <div style="text-align: center; margin-bottom: 15px;">
                             <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Firma Digital (Dibuja aquí):</div>
-                            <canvas id="signaturePad" width="300" height="150" style="border: 2px dashed #087a4d; border-radius: 8px; background: #fff; cursor: crosshair; touch-action: none; width: 100%; max-width: 400px;"></canvas>
+                            <canvas id="signaturePad" width="300" height="150" style="border: 2px dashed #511C87; border-radius: 8px; background: #fff; cursor: crosshair; touch-action: none; width: 100%; max-width: 400px;"></canvas>
                             <div style="display: flex; justify-content: space-between; max-width: 400px; margin: 5px auto 0;">
                                 <button type="button" id="clearSignatureBtn" style="font-size: 12px; color: #d9534f; background: none; border: none; cursor: pointer; text-decoration: underline;">Borrar firma</button>
                                 <span style="font-size: 11px; color: #a0afa7;">Dibuja con el dedo</span>
                             </div>
                         </div>
 
-                        <button type="button" id="acceptLoanBtn" class="submit-btn" style="background:#087a4d; color:#fff; border-radius:10px; padding:14px; width:100%; font-weight:bold; cursor:pointer; border:none; font-size: 16px; box-shadow: 0 4px 12px rgba(8,122,77,0.2);">
+                        <button type="button" id="acceptLoanBtn" class="submit-btn" style="background:#511C87; color:#fff; border-radius:10px; padding:14px; width:100%; font-weight:bold; cursor:pointer; border:none; font-size: 16px; box-shadow: 0 4px 12px rgba(8,122,77,0.2);">
                             Aceptar y Firmar Préstamo
                         </button>
                         
@@ -2414,10 +2477,10 @@
                             Ahorra dinero en tu bóveda de garantía. Tu dinero reservado actuará como colateral para extenderte una línea de crédito segura y emitirte una tarjeta.
                         </p>
                         
-                        <div style="background: #f4f7f5; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                        <div style="background: #F7F8FA; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                 <span style="font-weight: 700;">Garantía Reservada:</span>
-                                <span id="guaranteeBalanceDisplay" style="font-weight: 800; color: #087a4d;">$0.00</span>
+                                <span id="guaranteeBalanceDisplay" style="font-weight: 800; color: #511C87;">$0.00</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                 <span style="font-weight: 700;">Límite de Crédito:</span>
@@ -2431,19 +2494,19 @@
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
                             <div style="border: 1px solid #d5e0da; padding: 12px; border-radius: 10px; text-align: center; background: white;">
-                                <div style="font-size: 12px; color: #718078;">Nivel 1</div>
+                                <div style="font-size: 12px; color: #7A7682;">Nivel 1</div>
                                 <div style="font-weight: 800;">$300</div>
                             </div>
                             <div style="border: 1px solid #d5e0da; padding: 12px; border-radius: 10px; text-align: center; background: white;">
-                                <div style="font-size: 12px; color: #718078;">Nivel 2</div>
+                                <div style="font-size: 12px; color: #7A7682;">Nivel 2</div>
                                 <div style="font-weight: 800;">$500</div>
                             </div>
                             <div style="border: 1px solid #d5e0da; padding: 12px; border-radius: 10px; text-align: center; background: white;">
-                                <div style="font-size: 12px; color: #718078;">Nivel 3</div>
+                                <div style="font-size: 12px; color: #7A7682;">Nivel 3</div>
                                 <div style="font-weight: 800;">$1,000</div>
                             </div>
                             <div style="border: 1px solid #d5e0da; padding: 12px; border-radius: 10px; text-align: center; background: white;">
-                                <div style="font-size: 12px; color: #718078;">Nivel 4</div>
+                                <div style="font-size: 12px; color: #7A7682;">Nivel 4</div>
                                 <div style="font-weight: 800;">$2,500</div>
                             </div>
                         </div>
@@ -2463,16 +2526,16 @@
                         </p>
                         <form id="payLoanForm" style="display: flex; flex-direction: column; gap: 12px;">
                             <div style="display: flex; gap: 10px;">
-                                <select id="payLoanMethod" style="flex: 1; padding: 10px; border: 1px solid #d8e1dc; border-radius: 10px; outline: none; background: white;" required>
+                                <select id="payLoanMethod" style="flex: 1; padding: 10px; border: 1px solid #E0E0E5; border-radius: 10px; outline: none; background: white;" required>
                                     <option value="" disabled selected>Selecciona medio de pago...</option>
                                     <option value="saldo">Saldo VeraTransfers</option>
                                     <option value="banco">Transferencia Bancaria (ACH)</option>
                                     <option value="walmart">En efectivo (Tienda Walmart)</option>
                                     <option value="cvs">En efectivo (CVS Pharmacy)</option>
                                 </select>
-                                <input type="number" id="payLoanAmount" min="1" step="0.01" placeholder="Monto a pagar ($)" style="flex: 1; padding: 10px; border: 1px solid #d8e1dc; border-radius: 10px; outline: none;" required>
+                                <input type="number" id="payLoanAmount" min="1" step="0.01" placeholder="Monto a pagar ($)" style="flex: 1; padding: 10px; border: 1px solid #E0E0E5; border-radius: 10px; outline: none;" required>
                             </div>
-                            <button type="submit" class="profile-save-btn" style="margin: 0; padding: 12px; background: #087a4d;">Pagar Cuota</button>
+                            <button type="submit" class="profile-save-btn" style="margin: 0; padding: 12px; background: #511C87;">Pagar Cuota</button>
                         </form>
                         <div id="payLoanMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
                     </div>
@@ -2484,7 +2547,7 @@
                         </p>
                         <form id="payCreditForm" style="display: flex; gap: 10px;">
                             <input type="number" id="payCreditAmount" min="1" step="0.01" placeholder="Monto a pagar" style="flex: 1;" required>
-                            <button type="submit" class="profile-save-btn" style="margin: 0; padding: 10px 20px; background: #111d18;">Pagar</button>
+                            <button type="submit" class="profile-save-btn" style="margin: 0; padding: 10px 20px; background: #160924;">Pagar</button>
                         </form>
                         <div id="payCreditMsg" class="profile-msg hidden" style="margin-top:12px;"></div>
                     </div>
@@ -3198,6 +3261,14 @@
         ========================= */
 
         async function loadClientAccount() {
+            // Populate QR Modal
+            if (state.user && state.user.role === 'client') {
+                const qrHolder = document.getElementById('qrAccountHolder');
+                const qrId = document.getElementById('qrAccountId');
+                if (qrHolder) qrHolder.textContent = state.user.name;
+                if (qrId) qrId.textContent = state.user.account_id;
+            }
+
 
     try {
 
@@ -3401,7 +3472,7 @@ function renderClientMovements() {
                             style="
                                 font-weight:800;
                                 white-space:nowrap;
-                                color:${isCredit ? "#087a4d" : "#9b2c2c"};
+                                color:${isCredit ? "#511C87" : "#9b2c2c"};
                             "
                         >
                             ${amountText}
@@ -3778,7 +3849,7 @@ function escapeHtml(value) {
                         </td>
 
                         <td style="text-align:center; display:flex; justify-content:center; gap:8px;">
-                            <button class="block-btn" onclick="toggleBlockUser(${client.id}, event)" title="${client.role === 'blocked' ? 'Desbloquear' : 'Bloquear'} cliente" style="background:none;border:none;color:${client.role === 'blocked' ? '#f57c00' : '#718078'};cursor:pointer;font-size:18px;padding:4px;">
+                            <button class="block-btn" onclick="toggleBlockUser(${client.id}, event)" title="${client.role === 'blocked' ? 'Desbloquear' : 'Bloquear'} cliente" style="background:none;border:none;color:${client.role === 'blocked' ? '#f57c00' : '#7A7682'};cursor:pointer;font-size:18px;padding:4px;">
                                 🚫
                             </button>
                             <button class="delete-btn" onclick="deleteUser(${client.id}, event)" title="Eliminar cliente" style="background:none;border:none;color:#d32f2f;cursor:pointer;font-size:18px;padding:4px;">
@@ -5137,7 +5208,7 @@ function escapeHtml(value) {
                 } else {
                     notifList.innerHTML = data.notifications.map(n => `
                         <div style="padding: 10px 12px; border-bottom: 1px solid #f0f8f4; ${!n.read_at ? 'background: #fdfaf6;' : ''}">
-                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 4px; color: #087a4d;">${escapeHtml(n.title)}</div>
+                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 4px; color: #511C87;">${escapeHtml(n.title)}</div>
                             <div style="font-size: 13px; color: #4a5e55;">${escapeHtml(n.message)}</div>
                         </div>
                     `).join('');
@@ -5176,7 +5247,7 @@ function escapeHtml(value) {
 
             adminLoanMessage.textContent = "Generando contrato...";
             adminLoanMessage.className = "admin-message show";
-            adminLoanMessage.style.backgroundColor = "#f4f7f5";
+            adminLoanMessage.style.backgroundColor = "#F7F8FA";
             adminLoanMessage.style.color = "#4a5e55";
 
             try {
@@ -5196,7 +5267,7 @@ function escapeHtml(value) {
                     adminLoanMessage.textContent = "Contrato de préstamo generado y enviado al cliente con éxito.";
                     adminLoanMessage.className = "admin-message show";
                     adminLoanMessage.style.backgroundColor = "#ebf7f1";
-                    adminLoanMessage.style.color = "#087a4d";
+                    adminLoanMessage.style.color = "#511C87";
                     adminLoanForm.reset();
                     showToast("Contrato generado", "success");
                     // Refrescar notificaciones si existe para que aparezca la que enviamos
@@ -5283,7 +5354,7 @@ function escapeHtml(value) {
                 } else {
                     listDiv.innerHTML = data.notifications.map(n => `
                         <div style="padding: 10px 12px; border-bottom: 1px solid #f0f8f4;">
-                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 4px; color: #087a4d;">${escapeHtml(n.title)}</div>
+                            <div style="font-weight: bold; font-size: 13px; margin-bottom: 4px; color: #511C87;">${escapeHtml(n.title)}</div>
                             <div style="font-size: 13px; color: #4a5e55; margin-bottom: 6px;">${escapeHtml(n.message)}</div>
                             <div style="font-size: 11px; color: #8e9a94;">Enviado: ${new Date(n.created_at).toLocaleString()}</div>
                         </div>
@@ -5643,11 +5714,11 @@ function escapeHtml(value) {
     <div id="adminDocumentModal" class="modal hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column;">
         <div style="background:#fff; border-radius:12px; width:90%; max-width:600px; padding:20px; box-shadow:0 4px 15px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <h3 style="margin:0; color:#17231d;">Revisión de Documento</h3>
+                <h3 style="margin:0; color:#1D1A21;">Revisión de Documento</h3>
                 <button type="button" id="closeAdminDocModal" style="background:none; border:none; font-size:20px; cursor:pointer;">✖</button>
             </div>
             
-            <div style="text-align:center; background:#f4f7f5; padding:10px; border-radius:8px; margin-bottom:15px; min-height:200px; display:flex; align-items:center; justify-content:center;">
+            <div style="text-align:center; background:#F7F8FA; padding:10px; border-radius:8px; margin-bottom:15px; min-height:200px; display:flex; align-items:center; justify-content:center;">
                 <img id="adminDocImage" style="max-width:100%; max-height:50vh; border-radius:8px;" src="" alt="Cargando documento..." />
             </div>
 
@@ -5657,7 +5728,7 @@ function escapeHtml(value) {
             </div>
 
             <div style="display:flex; gap:10px;">
-                <button type="button" id="adminApproveDocBtn" style="flex:1; padding:12px; background:#087a4d; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">✅ Aprobar</button>
+                <button type="button" id="adminApproveDocBtn" style="flex:1; padding:12px; background:#511C87; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">✅ Aprobar</button>
                 <button type="button" id="adminRejectDocBtn" style="flex:1; padding:12px; background:#d9534f; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">❌ Solicitar corrección</button>
             </div>
             <div id="adminDocFeedback" class="profile-msg hidden" style="margin-top:10px;"></div>
@@ -5713,7 +5784,7 @@ function escapeHtml(value) {
                                 ${d.status === 'pending' ? 'Pendiente' : (d.status === 'approved' ? 'Aprobado' : 'Requiere corrección')}
                             </td>
                             <td>
-                                <button type="button" class="action-btn" onclick="openAdminDocModal(${d.id})" style="padding:6px 12px; background:#e9f5ee; color:#087a4d; border:1px solid #087a4d; border-radius:6px; cursor:pointer;">Ver documento</button>
+                                <button type="button" class="action-btn" onclick="openAdminDocModal(${d.id})" style="padding:6px 12px; background:#e9f5ee; color:#511C87; border:1px solid #511C87; border-radius:6px; cursor:pointer;">Ver documento</button>
                             </td>
                         </tr>
                     `;
@@ -5832,7 +5903,7 @@ function escapeHtml(value) {
         ctx = signaturePad.getContext("2d");
         ctx.lineWidth = 3;
         ctx.lineCap = "round";
-        ctx.strokeStyle = "#087a4d";
+        ctx.strokeStyle = "#511C87";
 
         const getPos = (e) => {
             const rect = signaturePad.getBoundingClientRect();
