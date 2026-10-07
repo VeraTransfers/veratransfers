@@ -3266,7 +3266,7 @@
                 const qrHolder = document.getElementById('qrAccountHolder');
                 const qrId = document.getElementById('qrAccountId');
                 if (qrHolder) qrHolder.textContent = state.user.name;
-                if (qrId) qrId.textContent = state.user.account_id;
+                if (qrId && state.account) qrId.textContent = 'VT-' + String(state.account.id).padStart(6, '0');
             }
 
 
@@ -3308,7 +3308,7 @@
         document.getElementById(
             "accountId"
         ).textContent =
-            account.account_number ? account.account_number : ('#' + account.id);
+            account.account_number ? account.account_number : ('VT-' + String(account.id).padStart(6, '0'));
 
         document.getElementById(
             "accountCurrency"
