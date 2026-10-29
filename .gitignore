@@ -4,3 +4,8 @@ node_modules/
 .env.production
 .env.*.local
 .DS_Store
+server/data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm

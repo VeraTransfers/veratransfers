@@ -1,7 +1,9 @@
-const express = require('express');
-const financeRoutes = require('./routes/finance');
-const cors = require("cors");
 const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
+const express = require('express');
+const cors = require("cors");
+const db = require("./database");
+const financeRoutes = require('./routes/finance');
 
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
@@ -12,7 +14,7 @@ const loansRouter = require("./routes/loans");
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 /* =========================================
 MIDDLEWARE
@@ -43,7 +45,7 @@ res.json({
     ok: true,
     application: "VeraTransfers",
     environment: "development",
-    database: "connected",
+    database: db.isSQLite ? "sqlite" : "postgres",
     currency: "USD",
     message: "Backend funcionando correctamente"
 });

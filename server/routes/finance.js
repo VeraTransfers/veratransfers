@@ -396,6 +396,26 @@ router.post("/notifications/read", authenticate, async (req, res) => {
     }
 });
 
+router.post("/notify-hold", authenticate, async (req, res) => {
+    try {
+        const { operationType, amount } = req.body || {};
+        const parsedAmount = Number(amount);
+        const amountStr = parsedAmount > 0 ? ` de $${parsedAmount.toFixed(2)} USD` : "";
+        const opName = operationType || "transferencia/retiro";
+        const msg = `Tu intento de ${opName}${amountStr} ha sido retenido por medidas de seguridad Anti-Lavado (AML). Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.`;
+
+        await db.prepare(`
+            INSERT INTO notifications (user_id, type, title, message)
+            VALUES (?, 'warning', '⚠️ Operación Retenida', ?)
+        `).run(req.user.userId, msg);
+
+        res.json({ ok: true, message: "Notificación registrada" });
+    } catch (error) {
+        console.error("POST /finance/notify-hold:", error);
+        res.status(500).json({ ok: false, error: "INTERNAL_ERROR" });
+    }
+});
+
 // ============================================================
 // ADMIN — ACREDITAR FONDOS DE PRUEBA
 // ============================================================

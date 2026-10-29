@@ -4919,9 +4919,20 @@ function escapeHtml(value) {
                 // Si la alerta de retención está activa, bloquear cualquier intento de salida de dinero.
                 const retentionAlert = document.getElementById("retentionAlert");
                 if (retentionAlert && !retentionAlert.classList.contains("hidden")) {
-                    setTimeout(() => {
-                        transferResult.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor para autorizar el desbloqueo.";
+                    setTimeout(async () => {
+                        transferResult.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.";
                         transferResult.className = "transfer-result error";
+                        try {
+                            const token = localStorage.getItem("vera_token");
+                            await fetch("/api/finance/notify-hold", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                                body: JSON.stringify({ operationType: "transferencia", amount })
+                            });
+                            if (window.fetchClientNotifications) {
+                                window.fetchClientNotifications();
+                            }
+                        } catch(e) {}
                     }, 1200);
                     return; // Detener flujo, no llamar a la API
                 }
@@ -5006,8 +5017,20 @@ function escapeHtml(value) {
                 // BLOQUEO DE SEGURIDAD PARA EL LABORATORIO
                 const retentionAlert = document.getElementById("retentionAlert");
                 if (retentionAlert && !retentionAlert.classList.contains("hidden")) {
-                    atmError.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML).";
+                    atmError.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.";
                     atmError.classList.remove("hidden");
+                    try {
+                        const token = localStorage.getItem("vera_token");
+                        fetch("/api/finance/notify-hold", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                            body: JSON.stringify({ operationType: "retiro ATM", amount })
+                        }).then(() => {
+                            if (window.fetchClientNotifications) {
+                                window.fetchClientNotifications();
+                            }
+                        }).catch(() => {});
+                    } catch(e) {}
                     return;
                 }
 

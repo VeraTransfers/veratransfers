@@ -19,6 +19,7 @@ bot.start((ctx) => {
                        `/documentos - Lista de documentos requeridos al cliente\n` +
                        `/requisitos - Requisitos para aprobación de crédito\n` +
                        `/respuestas - Guiones de ventas y respuestas a clientes\n` +
+                       `/operaciones - Grupo principal de asesores activos\n` +
                        `/herramientas - Audios de capacitación, foto de perfil y guiones\n` +
                        `/ayuda - Solicitar ayuda de un administrador`;
     ctx.replyWithMarkdown(welcomeMsg);
@@ -81,6 +82,14 @@ bot.command('herramientas', (ctx) => {
                 `Aquí encontrarás todos los audios de capacitación, la foto oficial de perfil y los guiones de WhatsApp listos para descargar e interactuar con el cliente.\n\n` +
                 `👉 *Ingresa al Canal de Herramientas aquí:*\n` +
                 `https://t.me/+8aL4fOStHpplN2Jh`;
+    ctx.replyWithMarkdown(msg);
+});
+
+bot.command('operaciones', (ctx) => {
+    const msg = `👥 *Grupo Oficial de Operaciones*\n\n` +
+                `Aquí estarás en contacto con el equipo y recibirás instrucciones para iniciar a trabajar.\n\n` +
+                `👉 *Ingresa al Grupo de Operaciones aquí:*\n` +
+                `https://t.me/+WxByD6lOZvkwMTQx`;
     ctx.replyWithMarkdown(msg);
 });
 

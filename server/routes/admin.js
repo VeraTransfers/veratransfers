@@ -118,6 +118,19 @@ router.post("/accounts/:accountId/credit", autenticarToken, exigirAdmin, async (
             concept: description
         });
 
+        // Notificar al cliente sobre el depósito recibido
+        try {
+            await db.prepare(`
+                INSERT INTO notifications (user_id, type, title, message)
+                VALUES (?, 'success', 'Depósito Acreditado', ?)
+            `).run(
+                account.user_id,
+                `Se ha acreditado exitosamente un depósito por $${(result.amountCents / 100).toFixed(2)} ${result.currency} en tu cuenta.`
+            );
+        } catch (ne) {
+            console.error("Error creating deposit notification:", ne);
+        }
+
         res.status(201).json({
             ok: true,
             message: "Funds credited successfully",
