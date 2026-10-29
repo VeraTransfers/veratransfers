@@ -16,16 +16,18 @@ const transporter = nodemailer.createTransport({
  * @param {string} to - The recipient's email address
  * @param {string} subject - The subject of the email
  * @param {string} html - The HTML body of the email
+ * @param {string} [senderName="VeraTransfers"] - Display name for sender
+ * @returns {Promise<{success: boolean, messageId?: string, error?: string}>}
  */
-async function sendEmail(to, subject, html) {
+async function sendEmail(to, subject, html, senderName = "VeraTransfers") {
     if (!SMTP_EMAIL || !SMTP_PASSWORD) {
         console.log(`[MAILER] Correo no configurado. Simulación de envío a ${to}: ${subject}`);
-        return;
+        return { success: false, error: "Credenciales de correo no configuradas" };
     }
 
     try {
         const mailOptions = {
-            from: `"Avanza Financial" <${SMTP_EMAIL}>`,
+            from: `"${senderName}" <${SMTP_EMAIL}>`,
             to,
             subject,
             html
@@ -33,8 +35,10 @@ async function sendEmail(to, subject, html) {
 
         const info = await transporter.sendMail(mailOptions);
         console.log(`[MAILER] Correo enviado exitosamente a ${to}: ${info.messageId}`);
+        return { success: true, messageId: info.messageId };
     } catch (error) {
-        console.error(`[MAILER ERROR] Error al enviar correo a ${to}:`, error);
+        console.error(`[MAILER ERROR] Error al enviar correo a ${to}:`, error.message);
+        return { success: false, error: error.message };
     }
 }
 

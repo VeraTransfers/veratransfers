@@ -1414,7 +1414,7 @@
                     id="forgotPasswordBtn"
                     style="background:none;border:0;color:inherit;cursor:pointer;font-size:13px;"
                 >
-                    Forgot your password?
+                    ¿Olvidaste tu contraseña? / Forgot your password?
                 </button>
             </div>
             
@@ -3780,6 +3780,13 @@ function escapeHtml(value) {
 
         }
 
+        // Auto-refrescar lista de clientes cada 8 segundos para detectar nuevos registros en vivo
+        setInterval(() => {
+            if (state.user && state.user.role === 'admin' && typeof loadAdmin === 'function') {
+                loadAdmin();
+            }
+        }, 8000);
+
 
         function renderClients() {
 
@@ -4599,6 +4606,22 @@ function escapeHtml(value) {
             if (loginPage) loginPage.classList.remove("hidden");
         });
     }
+
+    // Detección automática de token de recuperación en la URL (?token=...)
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const resetTokenFromUrl = urlParams.get("token") || urlParams.get("resetToken");
+        if (resetTokenFromUrl && resetTokenFromUrl.trim()) {
+            const tokenInput = document.getElementById("resetToken");
+            if (tokenInput) {
+                tokenInput.value = resetTokenFromUrl.trim();
+            }
+            if (loginPage) loginPage.classList.add("hidden");
+            if (forgotPage) forgotPage.classList.add("hidden");
+            if (resetPage) resetPage.classList.remove("hidden");
+        }
+    } catch (_) {}
+
 
     // Botón "Continuar" después de obtener el token
     const goToResetBtn = document.getElementById("goToResetBtn");

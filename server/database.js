@@ -306,7 +306,7 @@ async function initPG() {
     pool = new Pool({
         connectionString: dbUrl,
         ssl: isLocalhost ? false : { rejectUnauthorized: false },
-        connectionTimeoutMillis: 3000
+        connectionTimeoutMillis: 10000
     });
 
     // Probar conexión

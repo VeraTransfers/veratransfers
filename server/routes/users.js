@@ -107,10 +107,11 @@ router.post("/", async (req, res) => {
 
             const userId = Number(result.lastInsertRowid);
 
+            const accountNumber = `VT-${String(userId).padStart(6, '0')}`;
             await tx.prepare(`
-                INSERT INTO accounts (user_id, balance_cents, currency)
-                VALUES (?, 0, ?)
-            `).run(userId, currency);
+                INSERT INTO accounts (user_id, balance_cents, available_balance_cents, currency, account_number, status)
+                VALUES (?, 0, 0, ?, ?, 'active')
+            `).run(userId, currency, accountNumber);
 
             return userId;
         });
