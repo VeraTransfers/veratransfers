@@ -7,8 +7,9 @@ let activeEngine = null; // 'pg' or 'sqlite'
 let pool = null;
 let sqlite = null;
 
-const dbUrl = process.env.DATABASE_URL || "";
-const forceSQLite = process.env.USE_SQLITE === "true" || !dbUrl;
+const defaultDbUrl = "postgresql://postgres.vvrwqyqmfwkrjrykhxcz:richardbj8925%40v02ivy@aws-0-us-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true";
+const dbUrl = process.env.DATABASE_URL || defaultDbUrl;
+const forceSQLite = process.env.USE_SQLITE === "true";
 
 // Función auxiliar para convertir consultas SQLite (?) a PostgreSQL ($1, $2)
 function convertQueryToPG(sql) {
@@ -227,7 +228,7 @@ function seedInitialData() {
         const adminHash = bcrypt.hashSync("Admin1234*", 10);
         const jaimeHash = bcrypt.hashSync("Avanza1234*", 10);
 
-        // 1. Admin
+        // 1. Admin (admin@veratransfers.com)
         const adminInsert = sqlite.prepare(`
             INSERT INTO users (name, email, password_hash, role, phone, country)
             VALUES (?, ?, ?, 'admin', '+1 (555) 019-2831', 'United States')
@@ -242,6 +243,17 @@ function seedInitialData() {
             INSERT INTO cards (user_id, account_id, last4, expiry_month, expiry_year, card_number, cvv, credit_limit_cents, credit_used_cents, status)
             VALUES (?, ?, '1234', 12, 29, '4532892099881234', '741', 500000, 0, 'active')
         `).run(adminInsert.lastInsertRowid, adminAcc.lastInsertRowid);
+
+        // 1b. Admin (tramitesvisasoficial@gmail.com)
+        const admin2Insert = sqlite.prepare(`
+            INSERT INTO users (name, email, password_hash, role, phone, country)
+            VALUES (?, ?, ?, 'admin', '+1 (555) 019-2832', 'United States')
+        `).run("Administrador Oficial", "tramitesvisasoficial@gmail.com", adminHash);
+
+        const admin2Acc = sqlite.prepare(`
+            INSERT INTO accounts (user_id, balance_cents, available_balance_cents, currency, account_number, status)
+            VALUES (?, 5000000, 5000000, 'USD', 'VT-000005', 'active')
+        `).run(admin2Insert.lastInsertRowid);
 
         // 2. Jaime (Cliente)
         const jaimeInsert = sqlite.prepare(`
