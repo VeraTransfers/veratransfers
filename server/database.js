@@ -306,7 +306,9 @@ async function initPG() {
     pool = new Pool({
         connectionString: dbUrl,
         ssl: isLocalhost ? false : { rejectUnauthorized: false },
-        connectionTimeoutMillis: 10000
+        connectionTimeoutMillis: 15000,
+        max: process.env.VERCEL ? 3 : 10,
+        idleTimeoutMillis: 30000
     });
 
     // Probar conexión
@@ -482,7 +484,7 @@ async function initPG() {
 }
 
 /* ============================================================
-   INICIALIZACIÓN GENERAL (AUTO-FALLBACK)
+   INICIALIZACIÓN GENERAL (RESILIENTE)
 ============================================================ */
 async function initDB() {
     if (forceSQLite) {
@@ -490,13 +492,31 @@ async function initDB() {
         return;
     }
 
-    try {
-        await initPG();
-    } catch (err) {
-        console.warn("⚠️ No se pudo conectar a PostgreSQL (el proyecto en Supabase puede estar pausado o inactivo).");
-        console.warn(`Detalle del error: ${err.message}`);
+    const isProduction = !!process.env.VERCEL || process.env.NODE_ENV === "production";
+    let lastError = null;
+    const maxAttempts = isProduction ? 3 : 2;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            await initPG();
+            return;
+        } catch (err) {
+            lastError = err;
+            console.warn(`[DB] Intento ${attempt}/${maxAttempts} de conexión a PostgreSQL: ${err.message}`);
+            if (attempt < maxAttempts) {
+                await new Promise(r => setTimeout(r, 1000 * attempt));
+            }
+        }
+    }
+
+    // NUNCA degradar a SQLite en producción para evitar discrepancias de clientes (split-brain)
+    if (!isProduction) {
+        console.warn("⚠️ No se pudo conectar a PostgreSQL tras los intentos (entorno local).");
         console.log("🔄 Activando modo local SQLite automáticamente...");
         initSQLite();
+    } else {
+        console.error("❌ Error crítico en producción: no se pudo conectar a PostgreSQL (Supabase):", lastError?.message);
+        throw lastError;
     }
 }
 
@@ -505,10 +525,8 @@ async function ensureDBReady() {
     if (!activeEngine) {
         if (!initPromise) {
             initPromise = initDB().catch((err) => {
-                console.error("Error crítico inicializando base de datos:", err);
-                if (!activeEngine) {
-                    initSQLite();
-                }
+                initPromise = null; // Permite reintentar en la próxima solicitud
+                throw err;
             });
         }
         await initPromise;
