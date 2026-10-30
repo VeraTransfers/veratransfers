@@ -1070,18 +1070,47 @@
 </style>
 
 <style id="vera-card-premium-style">
+/* =====================================================
+   VERATRANSFERS LUXURY MASTERCARD SYSTEM
+===================================================== */
 .virtual-card {
     position: relative;
     overflow: hidden;
-    min-height: 235px;
-    padding: 26px;
-    border-radius: 24px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 275px;
+    padding: 26px 28px;
+    border-radius: 22px;
+    color: #ffffff;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background:
-        radial-gradient(circle at 85% 15%, rgba(255,255,255,.16), transparent 28%),
-        radial-gradient(circle at 15% 85%, rgba(34,197,94,.20), transparent 35%),
-        linear-gradient(135deg, #071a12 0%, #0b3b27 52%, #0f6b42 100%);
-    color: #fff;
-    box-shadow: 0 22px 50px rgba(0,0,0,.22);
+        radial-gradient(circle at 85% 15%, rgba(247, 158, 27, 0.18), transparent 35%),
+        radial-gradient(circle at 15% 85%, rgba(235, 0, 27, 0.18), transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05), transparent 60%),
+        linear-gradient(135deg, #0a0d14 0%, #131926 48%, #0d121c 100%);
+    box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.virtual-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.virtual-card.card-frozen {
+    filter: grayscale(0.65) brightness(0.85);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }
 
 .virtual-card .card-top {
@@ -1089,212 +1118,329 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    position: relative;
+    z-index: 2;
 }
 
-.virtual-card .card-logo {
-    font-size: 26px;
+.card-institution {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-brand-name {
+    font-size: 21px;
     font-weight: 800;
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
+    color: #ffffff;
+    text-transform: uppercase;
+    line-height: 1.1;
 }
 
-.virtual-card .card-status {
+.card-tier-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.2px;
+    color: #e5b967;
+    margin-top: 3px;
+    text-transform: uppercase;
+}
+
+.card-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: rgba(34, 197, 94, 0.16);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+.card-status-badge.status-frozen {
+    background: rgba(239, 68, 68, 0.16);
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.3);
+}
+
+.status-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* CHIP & CONTACTLESS */
+.card-middle {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    opacity: .92;
+    gap: 16px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
 }
 
-.virtual-card .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #65e6a0;
-    box-shadow: 0 0 0 4px rgba(101,230,160,.14);
+.emv-chip {
+    width: 46px;
+    height: 35px;
+    background: linear-gradient(135deg, #e5b967 0%, #fff1b8 45%, #c89a42 100%);
+    border-radius: 6px;
+    position: relative;
+    border: 1px solid #9c7524;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3);
+    overflow: hidden;
 }
 
-.virtual-card .chip {
-    width: 48px;
-    height: 36px;
-    margin-top: 34px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #d8d2ad, #918b67);
+.emv-chip .chip-line.horizontal {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(80, 50, 10, 0.35);
 }
 
+.emv-chip .chip-line.vertical {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 45%;
+    width: 1px;
+    background: rgba(80, 50, 10, 0.35);
+}
+
+.contactless-icon {
+    opacity: 0.75;
+    color: #e2e8f0;
+}
+
+/* CARD NUMBER */
 .virtual-card .card-number {
-    margin-top: 24px;
-    font-size: clamp(19px, 3vw, 25px);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Monaco, Courier, monospace;
+    font-size: clamp(19px, 3.2vw, 24px);
     font-weight: 600;
-    letter-spacing: 3px;
+    letter-spacing: 3.5px;
+    color: #ffffff;
+    margin: 20px 0 18px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.65);
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
 }
 
+/* CARD BOTTOM METADATA */
 .virtual-card .card-bottom {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 20px;
-    margin-top: 25px;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
 }
 
-.virtual-card .card-holder-label,
-.virtual-card .card-exp-label {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    opacity: .68;
+.card-col-holder {
+    flex: 1;
+    min-width: 0;
 }
 
-.virtual-card .card-holder,
-.virtual-card .card-exp {
-    margin-top: 5px;
-    font-size: 13px;
+.card-holder-label,
+.card-exp-label,
+.card-cvv-label {
+    font-size: 8.5px;
     font-weight: 700;
-}
-
-.card-disclaimer {
-    margin-top: 12px;
-    font-size: 11px;
-    line-height: 1.5;
-    color: #667085;
-}
-
-.requested-status {
-    color: #16834b;
-    font-weight: 600;
-}
-
-@media (max-width: 600px) {
-    .virtual-card {
-        min-height: 205px;
-        padding: 20px;
-        border-radius: 20px;
-    }
-
-    .virtual-card .chip {
-        margin-top: 25px;
-    }
-
-    .virtual-card .card-number {
-        margin-top: 19px;
-        font-size: 17px;
-        letter-spacing: 2px;
-    }
-}
-</style>
-
-
-<style id="vera-card-flip-safe-css">
-#cardDisplay {
-    perspective: 1400px;
-    cursor: pointer;
-}
-
-#cardDisplay .vera-flip-inner {
-    position: relative;
-    width: 100%;
-    transform-style: preserve-3d;
-    transition: transform .7s cubic-bezier(.2,.7,.2,1);
-}
-
-#cardDisplay.vera-flipped .vera-flip-inner {
-    transform: rotateY(180deg);
-}
-
-#cardDisplay .vera-flip-front,
-#cardDisplay .vera-flip-back {
-    width: 100%;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-#cardDisplay .vera-flip-front {
-    position: relative;
-}
-
-#cardDisplay .vera-flip-back {
-    position: absolute;
-    inset: 0;
-    transform: rotateY(180deg);
-    border-radius: inherit;
-    overflow: hidden;
-    color: #fff;
-    background:
-        radial-gradient(circle at 85% 12%, rgba(255,255,255,.12), transparent 28%),
-        linear-gradient(145deg, #1b2931 0%, #0d171d 55%, #071014 100%);
-}
-
-.vera-back-stripe {
-    width: 100%;
-    height: 55px;
-    margin-top: 25px;
-    background: linear-gradient(
-        180deg,
-        #050708 0%,
-        #181d20 50%,
-        #050708 100%
-    );
-}
-
-.vera-back-content {
-    padding: 24px 28px;
-}
-
-.vera-back-brand {
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: .18em;
-    margin-bottom: 22px;
-}
-
-.vera-back-cvv {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.vera-back-cvv-label {
-    font-size: 10px;
-    letter-spacing: .12em;
-    opacity: .65;
+    letter-spacing: 1.5px;
+    color: #94a3b8;
     text-transform: uppercase;
 }
 
-.vera-back-cvv-value {
+.virtual-card .card-holder {
+    margin-top: 4px;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #f1f5f9;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-col-security {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+}
+
+.card-exp-group,
+.card-cvv-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.virtual-card .card-exp,
+.virtual-card .card-cvv-value {
+    margin-top: 4px;
+    font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #f1f5f9;
+}
+
+.mastercard-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* FROZEN OVERLAY */
+.card-frozen-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 15, 26, 0.78);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: inherit;
+    transition: opacity 0.3s ease;
+}
+
+.card-frozen-overlay.hidden {
+    display: none !important;
+}
+
+.frozen-badge-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 30px;
+    background: rgba(239, 68, 68, 0.22);
+    border: 1px solid rgba(248, 113, 113, 0.5);
+    color: #fca5a5;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* CARD CONTROLS ACTION BAR */
+.card-action-bar {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    max-width: 480px;
+}
+
+.card-btn-action {
+    flex: 1;
+    min-width: 130px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 64px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    background: #fff;
-    color: #111820;
-    font-weight: 800;
-    letter-spacing: .15em;
+    gap: 7px;
+    padding: 10px 14px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.vera-back-message {
-    margin-top: 24px;
-    font-size: 12px;
-    line-height: 1.55;
-    color: rgba(255,255,255,.78);
+.card-btn-action:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
-.card-cvv {
+.card-btn-action.btn-freeze {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #be123c;
+}
+
+.card-btn-action.btn-freeze:hover {
+    background: #ffe4e6;
+    border-color: #fda4af;
+}
+
+.card-btn-action.btn-unfreeze {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+.card-btn-action.btn-unfreeze:hover {
+    background: #dcfce7;
+    border-color: #86efac;
+}
+
+/* STATUS MESSAGE */
+.card-status-message {
+    margin-top: 14px;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.45;
+    max-width: 480px;
+    box-sizing: border-box;
     display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 48px;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
 }
 
-.card-cvv-label {
-    font-size: 9px;
-    letter-spacing: .08em;
-    opacity: .65;
+.card-status-message.status-ok {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    #cardDisplay .vera-flip-inner {
-        transition: none;
+.card-status-message.status-warning {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+.card-institutional-footer {
+    margin-top: 10px;
+    max-width: 480px;
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+    text-align: center;
+}
+
+@media (max-width: 520px) {
+    .virtual-card {
+        padding: 20px 22px;
+        min-height: 245px;
+    }
+    .virtual-card .card-number {
+        font-size: 17px;
+        letter-spacing: 2.2px;
+        margin: 16px 0 14px;
+    }
+    .card-action-bar {
+        flex-direction: column;
+    }
+    .card-btn-action {
+        width: 100%;
     }
 }
 </style>
@@ -2045,18 +2191,18 @@
                         >
 
                             <h3>
-                                Solicita tu tarjeta VeraTransfers
+                                Solicita tu tarjeta VeraTransfers Mastercard®
                             </h3>
 
                             <p>
-                                Solicita tu tarjeta virtual para realizar compras online en todo el mundo. La emisión es inmediata y gratuita para clientes de Avanza Financial.
+                                Solicita tu tarjeta virtual para realizar compras y operaciones seguras en todo el mundo. Emisión inmediata con tecnología Mastercard® Contactless para clientes VeraTransfers.
                             </p>
 
                             <button
                                 id="requestCardBtn"
                                 class="request-btn"
                             >
-                                Solicitar tarjeta
+                                Solicitar tarjeta virtual
                             </button>
 
                         </div>
@@ -2069,21 +2215,31 @@
                             class="hidden"
                         >
 
-                            <div class="virtual-card">
+                            <div class="virtual-card" id="virtualCardWrapper">
 
                                 <div class="card-top">
-
-                                    <div class="card-logo" style="margin-top:-2px;">
-                                        <svg width="45" height="15" viewBox="0 0 32 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11.83 0L9.42 10H6.28L8.71 0H11.83ZM21.94 0L19.26 6.81L18.06 1.44C17.9 0.69 17.29 0.17 16.52 0.17H10.15L9.95 1.13C12.18 1.62 14.39 2.5 16 3.57L17.58 10H20.91L26.31 0H21.94ZM30.73 6.72C30.76 4.14 27.24 4 27.26 2.65C27.27 2.23 27.67 1.77 28.65 1.63C29.13 1.55 30.2 1.51 31.54 2.13L32.06 0.15C31.33 -0.06 30.07 -0.22 28.53 -0.22C25.56 -0.22 23.49 1.36 23.46 3.66C23.44 5.37 25.04 6.32 26.24 6.9C27.47 7.5 27.89 7.89 27.88 8.44C27.85 9.28 26.85 9.64 25.92 9.64C24.08 9.64 23.01 9.15 22.25 8.78L21.72 10.82C22.45 11.16 24.11 11.45 25.84 11.47C29.02 11.47 30.71 9.9 30.73 6.72ZM8.63 6.64L6.96 0H4.31C3.65 0 3.1 0.38 2.86 0.98L0.01 10H3.34L4 8.16H7.4L7.72 10H10.74L8.63 6.64ZM4.91 5.61L6.2 2.05L6.94 5.61H4.91Z" fill="white"/>
-                                        </svg>
+                                    <div class="card-institution">
+                                        <span class="card-brand-name">VeraTransfers</span>
+                                        <span class="card-tier-label">BLACK DEBIT</span>
                                     </div>
 
-                                    <div class="card-status"><span class="status-dot"></span>Tarjeta virtual</div>
-
+                                    <div class="card-status-badge" id="cardStatusBadge">
+                                        <span class="status-pulse-dot"></span>
+                                        <span id="cardStatusText">Activa</span>
+                                    </div>
                                 </div>
 
-                                <div class="chip"></div>
+                                <div class="card-middle">
+                                    <div class="emv-chip">
+                                        <div class="chip-line horizontal"></div>
+                                        <div class="chip-line vertical"></div>
+                                    </div>
+                                    <svg class="contactless-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                                        <path d="M8.5 16.5a5 5 0 0 1 0-9"/>
+                                        <path d="M12 19a8.5 8.5 0 0 0 0-14"/>
+                                        <path d="M15.5 21.5a12 12 0 0 0 0-19"/>
+                                    </svg>
+                                </div>
 
                                 <div
                                     id="cardNumber"
@@ -2094,54 +2250,79 @@
 
                                 <div class="card-bottom">
 
-                                    <div>
-
+                                    <div class="card-col-holder">
                                         <div class="card-holder-label">
-                                            TITULAR
+                                            TITULAR / CARDHOLDER
                                         </div>
-
                                         <div
                                             id="cardHolderName"
                                             class="card-holder"
                                         >
+                                            CLIENTE VERATRANSFERS
                                         </div>
-
                                     </div>
 
-                                    <div>
-
-                                        <div class="card-exp-label">
-                                            EXP
+                                    <div class="card-col-security">
+                                        <div class="card-exp-group">
+                                            <div class="card-exp-label">
+                                                VENCE / EXP
+                                            </div>
+                                            <div
+                                                id="cardExpiry"
+                                                class="card-exp"
+                                            >
+                                                --/--
+                                            </div>
                                         </div>
 
-                                        
-                                        <div
-                                            class="card-cvv"
-                                        >
+                                        <div class="card-cvv-group">
                                             <span class="card-cvv-label">CVV</span>
-                                            <span id="cardCvv">•••</span>
+                                            <span id="cardCvv" class="card-cvv-value">•••</span>
                                         </div>
+                                    </div>
 
-<div
-                                            id="cardExpiry"
-                                            class="card-exp"
-                                        >
-                                            --/--
-                                        </div>
-
+                                    <div class="mastercard-logo-container" title="Mastercard Worldwide">
+                                        <svg width="48" height="30" viewBox="0 0 48 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="15" cy="15" r="14" fill="#EB001B"/>
+                                            <circle cx="33" cy="15" r="14" fill="#F79E1B" fill-opacity="0.92"/>
+                                            <path d="M24 5.3A13.93 13.93 0 0 1 29 15A13.93 13.93 0 0 1 24 24.7A13.93 13.93 0 0 1 19 15A13.93 13.93 0 0 1 24 5.3Z" fill="#FF5F00"/>
+                                        </svg>
                                     </div>
 
                                 </div>
 
+                                <!-- Overlay cuando está congelada -->
+                                <div id="cardFrozenOverlay" class="card-frozen-overlay hidden">
+                                    <div class="frozen-badge-content">
+                                        <span>❄️</span>
+                                        <span>TARJETA BLOQUEADA PREVENTIVAMENTE</span>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <!-- card-disclaimer removed -->
+                            <!-- Barra de controles y acciones de la tarjeta -->
+                            <div class="card-action-bar">
+                                <button type="button" id="toggleCardDetailsBtn" class="card-btn-action">
+                                    <span id="cardEyeIcon">👁️</span> <span id="cardEyeText">Mostrar datos</span>
+                                </button>
+                                <button type="button" id="copyCardNumberBtn" class="card-btn-action">
+                                    <span>📋 Copiar número</span>
+                                </button>
+                                <button type="button" id="freezeCardBtn" class="card-btn-action btn-freeze">
+                                    <span id="freezeIcon">🔒</span> <span id="freezeText">Congelar tarjeta</span>
+                                </button>
+                            </div>
 
                             <div
-                                class="requested-status"
-                                style="margin-top:15px;"
+                                id="cardStatusAlert"
+                                class="card-status-message status-ok"
                             >
-                                &#10003; Tarjeta virtual activa
+                                &#10003; Tarjeta virtual activa y autorizada para operaciones internacionales Mastercard®.
+                            </div>
+
+                            <div class="card-institutional-footer">
+                                <small>Emitida bajo estándares de seguridad PCI-DSS Level 1. VeraTransfers es marca autorizada para emisión con Mastercard Worldwide.</small>
                             </div>
 
                         </div>
@@ -3509,221 +3690,220 @@ function escapeHtml(value) {
 }
 
 /* =========================
-   TARJETA
-        ========================= */
+   TARJETA VERATRANSFERS MASTERCARD
+========================= */
 
-        document
-            .getElementById("requestCardBtn")
-            .addEventListener(
-                "click",
-                async () => {
-
-                    try {
-
-                        if (!state.token) {
-
-                            throw new Error(
-                                "No hay una sesión activa."
-                            );
-
-                        }
-
-                        const data =
-                            await apiRequest(
-                                "/api/card/request",
-                                {
-                                    method: "POST"
-                                }
-                            );
-
-                        if (
-                            !data ||
-                            !data.ok ||
-                            !data.card
-                        ) {
-
-                            throw new Error(
-                                "No se pudo solicitar la tarjeta."
-                            );
-
-                        }
-
-                        state.cardRequested = true;
-
-                        state.card = data.card;
-
-                        showRequestedCard(
-                            data.card
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "Error al solicitar tarjeta:",
-                            error
-                        );
-
+        // Event listener para solicitar tarjeta
+        const reqCardBtn = document.getElementById("requestCardBtn");
+        if (reqCardBtn) {
+            reqCardBtn.addEventListener("click", async () => {
+                try {
+                    if (!state.token) {
+                        throw new Error("No hay una sesión activa.");
                     }
 
-                }
-            );
+                    reqCardBtn.disabled = true;
+                    reqCardBtn.textContent = "Emitiendo tarjeta Mastercard...";
 
+                    const data = await apiRequest("/api/card/request", {
+                        method: "POST"
+                    });
 
-        async function loadCard() {
-
-            // Siempre resetear el DOM antes de cargar la tarjeta
-            resetCardDOM();
-
-            try {
-
-                if (!state.token) {
-                    return;
-                }
-
-                const data = await apiRequest("/api/card");
-
-                if (data && data.ok && data.card) {
+                    if (!data || !data.ok || !data.card) {
+                        throw new Error(data && data.error ? data.error : "No se pudo solicitar la tarjeta.");
+                    }
 
                     state.cardRequested = true;
                     state.card = data.card;
                     showRequestedCard(data.card);
 
-                } else {
+                } catch (error) {
+                    console.error("Error al solicitar tarjeta:", error);
+                    alert("Error al solicitar la tarjeta: " + (error.message || "Intente nuevamente."));
+                } finally {
+                    if (reqCardBtn) {
+                        reqCardBtn.disabled = false;
+                        reqCardBtn.textContent = "Solicitar tarjeta virtual";
+                    }
+                }
+            });
+        }
 
+        // Toggle para revelar / ocultar número y CVV
+        const toggleDetailsBtn = document.getElementById("toggleCardDetailsBtn");
+        if (toggleDetailsBtn) {
+            toggleDetailsBtn.addEventListener("click", () => {
+                if (!state.card) return;
+                state.cardDetailsVisible = !state.cardDetailsVisible;
+                renderCardNumbersAndSecurity(state.card);
+            });
+        }
+
+        // Copiar número de tarjeta al portapapeles
+        const copyCardBtn = document.getElementById("copyCardNumberBtn");
+        if (copyCardBtn) {
+            copyCardBtn.addEventListener("click", async () => {
+                if (!state.card || !state.card.card_number) return;
+                const cleanNumber = String(state.card.card_number).replace(/\D/g, "");
+                try {
+                    await navigator.clipboard.writeText(cleanNumber);
+                    const originalHtml = copyCardBtn.innerHTML;
+                    copyCardBtn.innerHTML = "<span>✓ ¡Copiado!</span>";
+                    setTimeout(() => {
+                        copyCardBtn.innerHTML = originalHtml;
+                    }, 2000);
+                } catch (err) {
+                    prompt("Copia tu número de tarjeta:", cleanNumber);
+                }
+            });
+        }
+
+        // Bloquear / Desbloquear tarjeta (Toggle Freeze)
+        const freezeCardBtn = document.getElementById("freezeCardBtn");
+        if (freezeCardBtn) {
+            freezeCardBtn.addEventListener("click", async () => {
+                if (!state.card) return;
+                try {
+                    freezeCardBtn.disabled = true;
+                    const res = await apiRequest("/api/card/toggle-freeze", {
+                        method: "POST"
+                    });
+                    if (res && res.ok) {
+                        state.card.status = res.status;
+                        showRequestedCard(state.card);
+                    } else {
+                        throw new Error(res && res.error ? res.error : "No se pudo cambiar el estado de la tarjeta.");
+                    }
+                } catch (err) {
+                    console.error("Error al congelar/descongelar tarjeta:", err);
+                    alert("No se pudo actualizar el estado de la tarjeta: " + (err.message || "Error del servidor"));
+                } finally {
+                    freezeCardBtn.disabled = false;
+                }
+            });
+        }
+
+        async function loadCard() {
+            resetCardDOM();
+            try {
+                if (!state.token) return;
+                const data = await apiRequest("/api/card");
+                if (data && data.ok && data.card) {
+                    state.cardRequested = true;
+                    state.card = data.card;
+                    showRequestedCard(data.card);
+                } else {
                     state.cardRequested = false;
                     state.card = null;
                     resetCardDOM();
-
                 }
-
             } catch (error) {
-
                 console.error("Error al cargar tarjeta:", error);
                 state.cardRequested = false;
                 state.card = null;
                 resetCardDOM();
-
             }
-
         }
-
 
         function resetCardDOM() {
-
-            const cardDisplay =
-                document.getElementById("cardDisplay");
-
-            const cardRequestPanel =
-                document.getElementById("cardRequestPanel");
-
-            if (cardDisplay) {
-                cardDisplay.classList.add("hidden");
-            }
-
-            if (cardRequestPanel) {
-                cardRequestPanel.classList.remove("hidden");
-            }
-
+            const cardDisplay = document.getElementById("cardDisplay");
+            const cardRequestPanel = document.getElementById("cardRequestPanel");
+            if (cardDisplay) cardDisplay.classList.add("hidden");
+            if (cardRequestPanel) cardRequestPanel.classList.remove("hidden");
         }
 
+        function renderCardNumbersAndSecurity(card) {
+            const numberEl = document.getElementById("cardNumber");
+            const cvvEl = document.getElementById("cardCvv");
+            const eyeIcon = document.getElementById("cardEyeIcon");
+            const eyeText = document.getElementById("cardEyeText");
+
+            const fullCardNumber = String(card.card_number || "").replace(/\D/g, "");
+            const last4 = String(card.last4 || (fullCardNumber ? fullCardNumber.slice(-4) : "••••"));
+
+            if (state.cardDetailsVisible && fullCardNumber) {
+                if (numberEl) numberEl.textContent = fullCardNumber.replace(/(.{4})/g, "$1 ").trim();
+                if (cvvEl) cvvEl.textContent = card.cvv || "•••";
+                if (eyeIcon) eyeIcon.textContent = "🙈";
+                if (eyeText) eyeText.textContent = "Ocultar datos";
+            } else {
+                if (numberEl) numberEl.textContent = `•••• •••• •••• ${last4}`;
+                if (cvvEl) cvvEl.textContent = "•••";
+                if (eyeIcon) eyeIcon.textContent = "👁️";
+                if (eyeText) eyeText.textContent = "Mostrar datos";
+            }
+        }
 
         function showRequestedCard(card) {
+            const reqPanel = document.getElementById("cardRequestPanel");
+            const disp = document.getElementById("cardDisplay");
+            if (reqPanel) reqPanel.classList.add("hidden");
+            if (disp) disp.classList.remove("hidden");
 
-            document
-                .getElementById(
-                    "cardRequestPanel"
-                )
-                .classList.add("hidden");
-
-
-            document
-                .getElementById(
-                    "cardDisplay"
-                )
-                .classList.remove("hidden");
-
-
-            document
-                .getElementById(
-                    "cardHolderName"
-                )
-                .textContent =
-                    state.user.name;
-
-
-            const numberElement =
-                document.getElementById(
-                    "cardNumber"
-                );
-
-            if (numberElement) {
-
-                
-            const last4 =
-                String(
-                    card.last4 || ""
-                );
-
-            const fullCardNumber =
-                String(
-                    card.card_number || ""
-                ).replace(/\\D/g, "");
-
-            if (numberElement) {
-
-                numberElement.textContent =
-                    fullCardNumber
-                        ? fullCardNumber
-                            .replace(/(.{4})/g, "$1 ")
-                            .trim()
-                        : (
-                            last4
-                                ? `•••• •••• •••• ${last4}`
-                                : "•••• •••• •••• ••••"
-                        );
+            // Titular
+            const holderEl = document.getElementById("cardHolderName");
+            if (holderEl) {
+                holderEl.textContent = (state.user && state.user.name) ? state.user.name.toUpperCase() : "CLIENTE VERATRANSFERS";
             }
 
+            // Números y CVV
+            renderCardNumbersAndSecurity(card);
+
+            // Expiración
+            const expiryEl = document.getElementById("cardExpiry");
+            if (expiryEl) {
+                const month = String(card.expiry_month || "12").padStart(2, "0");
+                const year = String(card.expiry_year || "2030").slice(-2);
+                expiryEl.textContent = `${month}/${year}`;
             }
 
+            // Estado y Congelamiento
+            const cardWrapper = document.getElementById("virtualCardWrapper");
+            const frozenOverlay = document.getElementById("cardFrozenOverlay");
+            const statusBadge = document.getElementById("cardStatusBadge");
+            const statusText = document.getElementById("cardStatusText");
+            const statusAlert = document.getElementById("cardStatusAlert");
+            const freezeBtn = document.getElementById("freezeCardBtn");
+            const freezeIcon = document.getElementById("freezeIcon");
+            const freezeText = document.getElementById("freezeText");
 
-            const cvvElement =
-                document.getElementById(
-                    "cardCvv"
-                );
+            const isFrozen = (card.status === "blocked" || card.status === "frozen");
 
-            if (cvvElement) {
-
-                cvvElement.textContent =
-                    card.cvv
-                        ? card.cvv
-                        : "•••";
-
+            if (isFrozen) {
+                if (cardWrapper) cardWrapper.classList.add("card-frozen");
+                if (frozenOverlay) frozenOverlay.classList.remove("hidden");
+                if (statusBadge) {
+                    statusBadge.classList.add("status-frozen");
+                }
+                if (statusText) statusText.textContent = "Congelada";
+                if (freezeBtn) {
+                    freezeBtn.classList.remove("btn-freeze");
+                    freezeBtn.classList.add("btn-unfreeze");
+                }
+                if (freezeIcon) freezeIcon.textContent = "❄️";
+                if (freezeText) freezeText.textContent = "Descongelar tarjeta";
+                if (statusAlert) {
+                    statusAlert.className = "card-status-message status-warning";
+                    statusAlert.innerHTML = "⚠️ Tarjeta temporalmente congelada. Las operaciones y compras en línea se encuentran bloqueadas.";
+                }
+            } else {
+                if (cardWrapper) cardWrapper.classList.remove("card-frozen");
+                if (frozenOverlay) frozenOverlay.classList.add("hidden");
+                if (statusBadge) {
+                    statusBadge.classList.remove("status-frozen");
+                }
+                if (statusText) statusText.textContent = "Activa";
+                if (freezeBtn) {
+                    freezeBtn.classList.remove("btn-unfreeze");
+                    freezeBtn.classList.add("btn-freeze");
+                }
+                if (freezeIcon) freezeIcon.textContent = "🔒";
+                if (freezeText) freezeText.textContent = "Congelar tarjeta";
+                if (statusAlert) {
+                    statusAlert.className = "card-status-message status-ok";
+                    statusAlert.innerHTML = "&#10003; Tarjeta virtual activa y autorizada para operaciones internacionales Mastercard®.";
+                }
             }
-
-            const expiryElement =
-                document.getElementById(
-                    "cardExpiry"
-                );
-
-            if (expiryElement) {
-
-                const month =
-                    String(
-                        card.expiry_month || ""
-                    ).padStart(2, "0");
-
-                const year =
-                    String(
-                        card.expiry_year || ""
-                    ).slice(-2);
-
-                expiryElement.textContent =
-                    month && year
-                        ? `${month}/${year}`
-                        : "--/--";
-
-            }
-
         }
 
 

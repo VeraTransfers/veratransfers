@@ -6,16 +6,30 @@ const { autenticarToken } = require("./auth");
 
 const router = express.Router();
 
+function generateMastercardNumber() {
+    const prefix = "5399";
+    let digits = prefix;
+    while (digits.length < 15) {
+        digits += crypto.randomInt(0, 10).toString();
+    }
+    let sum = 0;
+    for (let i = 0; i < 15; i++) {
+        let val = parseInt(digits[i], 10);
+        if (i % 2 === 0) {
+            val *= 2;
+            if (val > 9) val -= 9;
+        }
+        sum += val;
+    }
+    const checkDigit = (10 - (sum % 10)) % 10;
+    return digits + checkDigit.toString();
+}
+
 async function generarNumeroSintetico() {
     let numero;
 
     do {
-        const parte1 = crypto.randomInt(1000, 10000).toString();
-        const parte2 = crypto.randomInt(1000, 10000).toString();
-        const parte3 = crypto.randomInt(1000, 10000).toString();
-        const parte4 = crypto.randomInt(1000, 10000).toString();
-
-        numero = `${parte1}${parte2}${parte3}${parte4}`;
+        numero = generateMastercardNumber();
     } while (
         await db.prepare(`
             SELECT id
@@ -75,7 +89,7 @@ router.get("/", autenticarToken, async (req, res) => {
 
 
 // =====================================================
-// SOLICITAR TARJETA
+// SOLICITAR / EMITIR TARJETA (DEMO O PRODUCCIÓN)
 // =====================================================
 
 router.post("/request", autenticarToken, async (req, res) => {
@@ -110,7 +124,7 @@ router.post("/request", autenticarToken, async (req, res) => {
             });
         }
 
-        // Generar datos sintéticos de tarjeta.
+        // Generar número Mastercard con validación Luhn
         const cardNumber = await generarNumeroSintetico();
         const last4 = cardNumber.slice(-4);
 
@@ -119,7 +133,7 @@ router.post("/request", autenticarToken, async (req, res) => {
 
         const cvv = generarCVV();
 
-        // Guardar tarjeta.
+        // Guardar tarjeta inmediatamente activa para demostración comercial
         const result = await db.prepare(`
             INSERT INTO cards (
                 user_id,
@@ -131,7 +145,7 @@ router.post("/request", autenticarToken, async (req, res) => {
                 cvv,
                 status
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'active')
         `).run(
             userId,
             account.id,
@@ -142,6 +156,7 @@ router.post("/request", autenticarToken, async (req, res) => {
             cvv
         );
 
+        const cardId = result.lastInsertRowid || result.id;
         const card = await db.prepare(`
             SELECT
                 id,
@@ -155,8 +170,8 @@ router.post("/request", autenticarToken, async (req, res) => {
                 status,
                 created_at
             FROM cards
-            WHERE id = ?
-        `).get(result.lastInsertRowid);
+            WHERE user_id = ?
+        `).get(userId);
 
         res.status(201).json({
             ok: true,
@@ -176,6 +191,46 @@ router.post("/request", autenticarToken, async (req, res) => {
 
 
 // =====================================================
+// BLOQUEAR / DESBLOQUEAR TARJETA (CLIENTE)
+// =====================================================
+
+router.post("/toggle-freeze", autenticarToken, async (req, res) => {
+    try {
+        const userId = req.usuario.id;
+        const card = await obtenerTarjeta(userId);
+
+        if (!card) {
+            return res.status(404).json({
+                ok: false,
+                error: "No se encontró una tarjeta para este usuario"
+            });
+        }
+
+        const newStatus = (card.status === "blocked" || card.status === "frozen") ? "active" : "blocked";
+
+        await db.prepare(`
+            UPDATE cards
+            SET status = ?
+            WHERE id = ?
+        `).run(newStatus, card.id);
+
+        res.json({
+            ok: true,
+            status: newStatus,
+            message: newStatus === "active" ? "Tarjeta activada con éxito" : "Tarjeta bloqueada preventivamente"
+        });
+
+    } catch (error) {
+        console.error("Error al cambiar estado de tarjeta:", error);
+        res.status(500).json({
+            ok: false,
+            error: "No se pudo actualizar el estado de la tarjeta"
+        });
+    }
+});
+
+
+// =====================================================
 // CAMBIAR ESTADO DE TARJETA (ADMIN)
 // =====================================================
 
@@ -188,7 +243,7 @@ router.patch("/:id/status", autenticarToken, async (req, res) => {
         const { status } = req.body;
         const cardId = req.params.id;
 
-        const validStatuses = ["pending", "approved", "shipped", "delivered", "rejected", "active"];
+        const validStatuses = ["pending", "approved", "shipped", "delivered", "rejected", "active", "blocked", "frozen"];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ ok: false, error: "Estado inválido" });
         }
