@@ -1469,7 +1469,7 @@
             <img src="/login_bg.jpg" class="auth-bg-img" alt="Fondo VeraTransfers">
             <div class="auth-visual-content">
                 <div class="brand auth-brand-white">VeraTransfers</div>
-                <h2 class="auth-visual-title">Billetera oficial de Avanza Financial</h2>
+                <h2 class="auth-visual-title">Billetera digital internacional</h2>
                 <ul class="auth-visual-list">
                     <li>Recepción rápida de tus préstamos</li>
                     <li>Transferencias seguras e inmediatas</li>
@@ -1482,7 +1482,7 @@
             
             <div class="auth-mobile-hero">
                 <div class="brand">VeraTransfers</div>
-                <h2>Billetera oficial de Avanza Financial</h2>
+                <h2>Billetera digital internacional</h2>
                 <p>Transferencias seguras, recepción de préstamos y administración de fondos con cifrado de grado bancario.</p>
             </div>
 
@@ -1591,7 +1591,7 @@
             <img src="/login_bg.jpg" class="auth-bg-img" alt="Fondo VeraTransfers">
             <div class="auth-visual-content">
                 <div class="brand auth-brand-white">VeraTransfers</div>
-                <h2 class="auth-visual-title">Billetera oficial de Avanza Financial</h2>
+                <h2 class="auth-visual-title">Billetera digital internacional</h2>
                 <ul class="auth-visual-list">
                     <li>Recepción rápida de tus préstamos</li>
                     <li>Transferencias seguras e inmediatas</li>
@@ -1604,7 +1604,7 @@
             
             <div class="auth-mobile-hero">
                 <div class="brand">VeraTransfers</div>
-                <h2>Billetera oficial de Avanza Financial</h2>
+                <h2>Billetera digital internacional</h2>
                 <p>Transferencias seguras, recepción de préstamos y administración de fondos con cifrado de grado bancario.</p>
             </div>
 
@@ -2037,7 +2037,7 @@
                     <span style="font-size:20px;">⚠️</span>
                     <div>
                         <strong style="display:block;margin-bottom:4px;color:#991b1b;">Transferencia exitosa</strong>
-                        Tu dinero se encuentra retenido por motivos de seguridad. Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.
+                        Tu dinero se encuentra retenido por motivos de seguridad. Por favor comunícate con tu asesor en VeraTransfers para autorizar el desbloqueo.
                     </div>
                 </div>
 
@@ -2446,7 +2446,7 @@
 
                 
                 <!-- TAB: INVESTMENTS -->
-                <div id="tabInversiones" class="tab-panel hidden">
+                <div id="tabInversiones" class="tab-panel">
                     <div class="panel balance-panel" style="background: linear-gradient(135deg, #3D1565, #511C87);">
                         <div class="stat-label">Total Invested Capital</div>
                         <div class="stat-value">$0.00</div>
@@ -2647,7 +2647,7 @@
                         </div>
 
                         <div style="font-size: 12px; color: #69756f; margin-bottom: 15px; text-align: justify;">
-                            Al firmar este documento, aceptas los términos y condiciones de Avanza Financial. Te comprometes a realizar los pagos acordados en las fechas establecidas. En caso de incumplimiento, se aplicarán recargos. Este documento tiene validez legal una vez firmado digitalmente.
+                            Al firmar este documento, aceptas los términos y condiciones de VeraTransfers. Te comprometes a realizar los pagos acordados en las fechas establecidas. En caso de incumplimiento, se aplicarán recargos. Este documento tiene validez legal una vez firmado digitalmente.
                         </div>
 
                         <div style="text-align: center; margin-bottom: 15px;">
@@ -4411,6 +4411,31 @@ function escapeHtml(value) {
         }
 
 
+        let authLang = 'en';
+        function toggleAuthLanguage() {
+            authLang = authLang === 'en' ? 'es' : 'en';
+            const btn1 = document.getElementById('currentLangBtnText');
+            const btn2 = document.getElementById('currentLangBtnText2');
+            if (btn1) btn1.textContent = authLang.toUpperCase();
+            if (btn2) btn2.textContent = authLang.toUpperCase();
+            
+            const isEn = authLang === 'en';
+            const loginSection = document.getElementById('loginPage');
+            if (loginSection) {
+                const title = loginSection.querySelector('.login-title');
+                if (title) title.textContent = isEn ? 'Welcome Back' : 'Bienvenido de nuevo';
+                const sub = loginSection.querySelector('.login-subtitle');
+                if (sub) sub.textContent = isEn ? 'Sign in to your VeraTransfers account' : 'Accede a tu cuenta.';
+            }
+            const registerSection = document.getElementById('registerPage');
+            if (registerSection) {
+                const title = registerSection.querySelector('.login-title');
+                if (title) title.textContent = isEn ? 'Create your account' : 'Crear cuenta';
+                const sub = registerSection.querySelector('.login-subtitle');
+                if (sub) sub.textContent = isEn ? 'Join VeraTransfers today' : 'Únete a VeraTransfers hoy.';
+            }
+        }
+
         function showRegisterPage() {
 
             loginPage.classList.add(
@@ -5097,8 +5122,42 @@ function escapeHtml(value) {
 
 
     /* =========================
-       TRANSFERENCIA INTERNA
+       TRANSFERENCIA INTERNA / ZELLE
     ========================= */
+
+    const zelleSendBtn = document.getElementById("zelleSendBtn");
+    const zelleRequestBtn = document.getElementById("zelleRequestBtn");
+    const transferBtn = document.getElementById("transferBtn");
+
+    if (zelleSendBtn && zelleRequestBtn) {
+        zelleSendBtn.addEventListener("click", () => {
+            zelleSendBtn.style.background = "#511C87";
+            zelleSendBtn.style.color = "white";
+            zelleSendBtn.style.border = "none";
+            zelleSendBtn.style.boxShadow = "0 4px 12px rgba(81, 28, 135, 0.2)";
+
+            zelleRequestBtn.style.background = "#fff";
+            zelleRequestBtn.style.color = "#511C87";
+            zelleRequestBtn.style.border = "2px solid #511C87";
+            zelleRequestBtn.style.boxShadow = "none";
+
+            if (transferBtn) transferBtn.textContent = "Review & Send";
+        });
+
+        zelleRequestBtn.addEventListener("click", () => {
+            zelleRequestBtn.style.background = "#511C87";
+            zelleRequestBtn.style.color = "white";
+            zelleRequestBtn.style.border = "none";
+            zelleRequestBtn.style.boxShadow = "0 4px 12px rgba(81, 28, 135, 0.2)";
+
+            zelleSendBtn.style.background = "#fff";
+            zelleSendBtn.style.color = "#511C87";
+            zelleSendBtn.style.border = "2px solid #511C87";
+            zelleSendBtn.style.boxShadow = "none";
+
+            if (transferBtn) transferBtn.textContent = "Request Money";
+        });
+    }
 
     const transferForm   = document.getElementById("transferForm");
     const transferResult = document.getElementById("transferResult");
@@ -5123,7 +5182,7 @@ function escapeHtml(value) {
                 const retentionAlert = document.getElementById("retentionAlert");
                 if (retentionAlert && !retentionAlert.classList.contains("hidden")) {
                     setTimeout(async () => {
-                        transferResult.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.";
+                        transferResult.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor en VeraTransfers para autorizar el desbloqueo.";
                         transferResult.className = "transfer-result error";
                         try {
                             const token = localStorage.getItem("vera_token");
@@ -5220,7 +5279,7 @@ function escapeHtml(value) {
                 // BLOQUEO DE SEGURIDAD PARA EL LABORATORIO
                 const retentionAlert = document.getElementById("retentionAlert");
                 if (retentionAlert && !retentionAlert.classList.contains("hidden")) {
-                    atmError.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.";
+                    atmError.innerHTML = "<strong>Error SEC-991: Operación denegada.</strong><br>Los fondos se encuentran bajo revisión de seguridad por políticas Anti-Lavado (AML). Por favor comunícate con tu asesor en VeraTransfers para autorizar el desbloqueo.";
                     atmError.classList.remove("hidden");
                     try {
                         const token = localStorage.getItem("vera_token");

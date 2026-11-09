@@ -6,11 +6,11 @@ const { autenticarToken } = require('./auth');
 // Get current user's loans
 router.get('/my-loans', autenticarToken, async (req, res) => {
     try {
-        const userId = req.user.userId;
+        const userId = (req.usuario && req.usuario.id) || (req.user && (req.user.userId || req.user.id));
         const loans = await db.all('SELECT * FROM loans WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
         res.json({ ok: true, loans });
     } catch (err) {
-        console.error(err);
+        console.error("GET /loans/my-loans error:", err);
         res.status(500).json({ ok: false, error: 'Error interno del servidor' });
     }
 });
@@ -18,7 +18,7 @@ router.get('/my-loans', autenticarToken, async (req, res) => {
 // Sign and accept loan
 router.post('/:id/sign', autenticarToken, async (req, res) => {
     try {
-        const userId = req.user.userId;
+        const userId = (req.usuario && req.usuario.id) || (req.user && (req.user.userId || req.user.id));
         const loanId = req.params.id;
         const { signatureData } = req.body;
 
@@ -32,12 +32,12 @@ router.post('/:id/sign', autenticarToken, async (req, res) => {
 
         // Record a notification
         const notifTitle = 'Contrato de Préstamo Firmado';
-        const notifMsg = 'Has firmado exitosamente tu contrato de préstamo. Tu asesor de Avanza Financial está revisándolo para autorizar el desembolso.';
+        const notifMsg = 'Has firmado exitosamente tu contrato de préstamo. Tu asesor de VeraTransfers está revisándolo para autorizar el desembolso.';
         await db.prepare('INSERT INTO notifications (user_id, type, title, message) VALUES ($1, $2, $3, $4)').run(userId, 'info', notifTitle, notifMsg);
 
         res.json({ ok: true, message: 'Préstamo firmado correctamente' });
     } catch (err) {
-        console.error(err);
+        console.error("POST /loans/:id/sign error:", err);
         res.status(500).json({ ok: false, error: 'Error interno del servidor' });
     }
 });

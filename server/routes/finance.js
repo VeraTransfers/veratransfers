@@ -402,7 +402,7 @@ router.post("/notify-hold", authenticate, async (req, res) => {
         const parsedAmount = Number(amount);
         const amountStr = parsedAmount > 0 ? ` de $${parsedAmount.toFixed(2)} USD` : "";
         const opName = operationType || "transferencia/retiro";
-        const msg = `Tu intento de ${opName}${amountStr} ha sido retenido por medidas de seguridad Anti-Lavado (AML). Por favor comunícate con tu asesor en Avanza Financial para autorizar el desbloqueo.`;
+        const msg = `Tu intento de ${opName}${amountStr} ha sido retenido por medidas de seguridad Anti-Lavado (AML). Por favor comunícate con tu asesor en VeraTransfers para autorizar el desbloqueo.`;
 
         await db.prepare(`
             INSERT INTO notifications (user_id, type, title, message)
@@ -557,14 +557,15 @@ router.post("/spend-credit", authenticate, async (req, res) => {
             return res.status(400).json({ ok: false, error: "Monto inválido" });
         }
 
-        const account = await db.prepare("SELECT id FROM accounts WHERE user_id = ?").get(req.user.id);
+        const userId = (req.user && (req.user.userId || req.user.id)) || (req.usuario && req.usuario.id);
+        const account = await db.prepare("SELECT id FROM accounts WHERE user_id = ?").get(userId);
         
         if (!account) {
             return res.status(404).json({ ok: false, error: "Cuenta no encontrada" });
         }
 
         const result = await simulateCreditPurchase({
-            userId: req.user.id,
+            userId: userId,
             accountId: account.id,
             amount: Number(amount)
         });

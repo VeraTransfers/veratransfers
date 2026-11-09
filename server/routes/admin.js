@@ -242,13 +242,13 @@ router.post("/notifications", autenticarToken, exigirAdmin, async (req, res) => 
         if (user && user.email) {
             await sendEmail(
                 user.email,
-                `Notificación de Avanza Financial: ${title}`,
+                `Notificación de VeraTransfers: ${title}`,
                 `<div style="font-family: Arial, sans-serif; color: #17231d; max-width: 600px; margin: 0 auto; border: 1px solid #d5e0da; border-radius: 10px; overflow: hidden;">
-                    <div style="background-color: #087a4d; padding: 20px; text-align: center;">
-                        <h2 style="color: white; margin: 0; font-size: 24px;">Avanza Financial</h2>
+                    <div style="background-color: #511C87; padding: 20px; text-align: center;">
+                        <h2 style="color: white; margin: 0; font-size: 24px;">VeraTransfers</h2>
                     </div>
                     <div style="padding: 30px; background-color: #f9fdfa;">
-                        <h3 style="color: #087a4d; margin-top: 0;">Hola ${user.name},</h3>
+                        <h3 style="color: #511C87; margin-top: 0;">Hola ${user.name},</h3>
                         <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
                             ${message}
                         </p>
@@ -257,7 +257,7 @@ router.post("/notifications", autenticarToken, exigirAdmin, async (req, res) => 
                         </p>
                     </div>
                     <div style="background-color: #17231d; padding: 15px; text-align: center; color: #d5e0da; font-size: 12px;">
-                        &copy; ${new Date().getFullYear()} Avanza Financial / VeraTransfers. Todos los derechos reservados.
+                        &copy; ${new Date().getFullYear()} VeraTransfers. Todos los derechos reservados.
                     </div>
                 </div>`
             );
@@ -414,13 +414,13 @@ router.put("/documents/:id/status", autenticarToken, exigirAdmin, async (req, re
             if (user && user.email) {
                 await sendEmail(
                     user.email,
-                    `Avanza Financial: ${notifTitle}`,
+                    `VeraTransfers: ${notifTitle}`,
                     `<div style="font-family: Arial, sans-serif; color: #17231d; max-width: 600px; margin: 0 auto; border: 1px solid #d5e0da; border-radius: 10px; overflow: hidden;">
-                        <div style="background-color: #087a4d; padding: 20px; text-align: center;">
-                            <h2 style="color: white; margin: 0; font-size: 24px;">Avanza Financial</h2>
+                        <div style="background-color: #511C87; padding: 20px; text-align: center;">
+                            <h2 style="color: white; margin: 0; font-size: 24px;">VeraTransfers</h2>
                         </div>
                         <div style="padding: 30px; background-color: #f9fdfa;">
-                            <h3 style="color: #087a4d; margin-top: 0;">Hola ${user.name},</h3>
+                            <h3 style="color: #511C87; margin-top: 0;">Hola ${user.name},</h3>
                             <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
                                 ${notifMessage}
                             </p>
@@ -429,7 +429,7 @@ router.put("/documents/:id/status", autenticarToken, exigirAdmin, async (req, re
                             </p>
                         </div>
                         <div style="background-color: #17231d; padding: 15px; text-align: center; color: #d5e0da; font-size: 12px;">
-                            &copy; ${new Date().getFullYear()} Avanza Financial / VeraTransfers. Todos los derechos reservados.
+                            &copy; ${new Date().getFullYear()} VeraTransfers. Todos los derechos reservados.
                         </div>
                     </div>`
                 );

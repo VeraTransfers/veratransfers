@@ -95,6 +95,7 @@ async function autenticarToken(req, res, next) {
         }
 
         req.usuario = user;
+        req.user = { userId: user.id, id: user.id, role: user.role };
 
         next();
 
