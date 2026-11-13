@@ -3950,6 +3950,10 @@ function escapeHtml(value) {
                             client.account_id
                     ).length;
 
+                const sysStatus = document.getElementById("systemStatus");
+                if (sysStatus) {
+                    sysStatus.textContent = "Conectado";
+                }
 
                 renderClients();
 
