@@ -1563,6 +1563,17 @@
                     ¿Olvidaste tu contraseña? / Forgot your password?
                 </button>
             </div>
+
+            <!-- Botón Prominente Instalar App en Login -->
+            <div style="margin-top: 18px; text-align: center;">
+                <button
+                    type="button"
+                    id="loginInstallAppBtn"
+                    style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border: 1.5px solid #8b5cf6; color: #511C87; padding: 10px 18px; border-radius: 25px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 3px 8px rgba(139,92,246,0.15); transition: all 0.2s ease;"
+                >
+                    📲 <span>Instalar App Oficial en este celular</span>
+                </button>
+            </div>
             
             <div style="margin-top:24px;text-align:center;font-size:12px;color:#7A7682;display:flex;align-items:center;justify-content:center;gap:6px;">
                 <span>🔒</span> Cifrado de extremo a extremo SSL
@@ -5793,10 +5804,27 @@ function escapeHtml(value) {
 })();
 </script>
 
-<!-- PWA Install Prompt Button -->
-<button id="pwa-install-btn" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; z-index: 9999; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-family: inherit;">
-  ⬇️ Instalar App
+<!-- PWA Install Prompt Floating Button -->
+<button id="pwa-install-btn" style="display: flex; align-items: center; gap: 8px; position: fixed; bottom: 22px; right: 22px; background: linear-gradient(135deg, #511C87 0%, #16a34a 100%); color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 700; font-size: 13.5px; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-family: inherit; transition: transform 0.2s ease;">
+  📲 <span>Instalar App Oficial</span>
 </button>
+
+<!-- PWA Install Modal -->
+<div id="pwaInstallModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 100000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(3px);">
+  <div style="background: white; border-radius: 16px; max-width: 440px; width: 100%; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; font-family: inherit;">
+    <button type="button" id="closePwaModalBtn" style="position: absolute; top: 14px; right: 14px; background: #f1f5f9; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #475569; font-weight: bold;">✕</button>
+    
+    <div id="pwaModalBody">
+      <!-- Contenido inyectado dinámicamente -->
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+      <button type="button" id="confirmPwaModalBtn" style="background: #511C87; color: white; border: none; padding: 11px 24px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%;">
+        Entendido
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
   // Service Worker Registration
@@ -5812,32 +5840,105 @@ function escapeHtml(value) {
     });
   }
 
-  // PWA Install Prompt Logic
+  // PWA Install Prompt Logic (iOS & Android)
   let deferredPrompt;
   const installBtn = document.getElementById('pwa-install-btn');
+  const loginInstallBtn = document.getElementById('loginInstallAppBtn');
+  const pwaModal = document.getElementById('pwaInstallModal');
+  const pwaModalBody = document.getElementById('pwaModalBody');
+  const closePwaModalBtn = document.getElementById('closePwaModalBtn');
+  const confirmPwaModalBtn = document.getElementById('confirmPwaModalBtn');
+
+  // Si ya está ejecutándose como App instalada (standalone), ocultar botones
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isStandalone) {
+    if (installBtn) installBtn.style.display = 'none';
+    if (loginInstallBtn) loginInstallBtn.style.display = 'none';
+  }
 
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    installBtn.style.display = 'block';
+    if (installBtn && !isStandalone) installBtn.style.display = 'flex';
   });
 
-  installBtn.addEventListener('click', (e) => {
-    // hide our user interface that shows our A2HS button
-    installBtn.style.display = 'none';
-    // Show the prompt
-    deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt');
-      }
-      deferredPrompt = null;
+  function triggerPwaInstall() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          if (installBtn) installBtn.style.display = 'none';
+          if (loginInstallBtn) loginInstallBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+      return;
+    }
+
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isIOS) {
+      pwaModalBody.innerHTML = `
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:42px;margin-bottom:8px;">📱</div>
+          <h3 style="margin:0 0 6px;font-size:18px;color:#0f172a;font-weight:800;">Instalar VeraTransfers en iPhone</h3>
+          <p style="font-size:13px;color:#64748b;margin:0;">Sigue estos 3 sencillos pasos en Safari:</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;font-size:13.5px;color:#334155;line-height:1.5;">
+          <div style="margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;">
+            <span style="background:#511C87;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;">1</span>
+            <div>Toca el botón <strong>Compartir</strong> en la barra inferior de Safari (el icono de un cuadro con una flecha hacia arriba <strong>⎋</strong> o <strong>⬆️</strong>).</div>
+          </div>
+          <div style="margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;">
+            <span style="background:#511C87;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;">2</span>
+            <div>Desliza hacia abajo en las opciones y selecciona <strong>'Agregar a pantalla de inicio'</strong> (icono <strong>➕</strong>).</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <span style="background:#511C87;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;">3</span>
+            <div>Toca <strong>'Agregar'</strong> arriba a la derecha. ¡Listo! Tendrás el icono oficial en tu pantalla.</div>
+          </div>
+        </div>
+      `;
+    } else {
+      pwaModalBody.innerHTML = `
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:42px;margin-bottom:8px;">📱</div>
+          <h3 style="margin:0 0 6px;font-size:18px;color:#0f172a;font-weight:800;">Instalar VeraTransfers en Android</h3>
+          <p style="font-size:13px;color:#64748b;margin:0;">Sigue estos pasos en Google Chrome:</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;font-size:13.5px;color:#334155;line-height:1.5;">
+          <div style="margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;">
+            <span style="background:#511C87;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;">1</span>
+            <div>Toca los <strong>3 puntos (⋮)</strong> en la esquina superior derecha del navegador Chrome.</div>
+          </div>
+          <div style="margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;">
+            <span style="background:#511C87;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;">2</span>
+            <div>Selecciona la opción <strong>'Instalar aplicación'</strong> o <strong>'Agregar a la pantalla principal'</strong>.</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <span style="background:#511C87;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;flex-shrink:0;">3</span>
+            <div>Toca en <strong>'Instalar'</strong> y la App se guardará en tus aplicaciones.</div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (pwaModal) pwaModal.style.display = 'flex';
+  }
+
+  if (installBtn) installBtn.addEventListener('click', triggerPwaInstall);
+  if (loginInstallBtn) loginInstallBtn.addEventListener('click', triggerPwaInstall);
+
+  if (closePwaModalBtn) {
+    closePwaModalBtn.addEventListener('click', () => {
+      if (pwaModal) pwaModal.style.display = 'none';
     });
-  });
+  }
+
+  if (confirmPwaModalBtn) {
+    confirmPwaModalBtn.addEventListener('click', () => {
+      if (pwaModal) pwaModal.style.display = 'none';
+    });
+  }
 </script>
 
 <script>
